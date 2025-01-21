@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Start Server" type="ShConfigurationType" focusToolWindowBeforeRun="true" singleton="true">
-    <option name="SCRIPT_TEXT" value="java -jar server.jar --nogui -o false --add-plugin ../build/libs/CaptureTheFlag-1.0-SNAPSHOT.jar" />
+    <option name="SCRIPT_TEXT" value="java -jar server.jar --nogui -o false --add-plugin ../build/libs/CaptureTheFlag-1.0-SNAPSHOT-all.jar" />
     <option name="INDEPENDENT_SCRIPT_PATH" value="true" />
     <option name="SCRIPT_PATH" value="" />
     <option name="SCRIPT_OPTIONS" value="" />
@@ -13,7 +13,7 @@
     <option name="EXECUTE_SCRIPT_FILE" value="false" />
     <envs />
     <method v="2">
-      <option name="Gradle.BeforeRunTask" enabled="true" tasks="jar" externalProjectPath="$PROJECT_DIR$" vmOptions="" scriptParameters="" />
+      <option name="Gradle.BeforeRunTask" enabled="false" tasks="shadowJar" externalProjectPath="$PROJECT_DIR$" vmOptions="" scriptParameters="" />
     </method>
   </configuration>
 </component>
