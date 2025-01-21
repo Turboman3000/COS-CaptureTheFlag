@@ -5,6 +5,7 @@ import de.maxhenkel.voicechat.api.VoicechatServerApi;
 import de.turboman.ctf.commands.CTFCommand;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
@@ -14,11 +15,14 @@ public final class CaptureTheFlag extends JavaPlugin {
     public static ArrayList<CTFTeam> teamList = new ArrayList<>();
     public static VoicechatServerApi voicechatAPI;
     public static final String prefix = "<dark_aqua>Capture the Flag <gold>⇒<reset> ";
+    public static Plugin plugin;
 
     private MiniMessage mm = MiniMessage.miniMessage();
 
     @Override
     public void onEnable() {
+        plugin = this;
+
         BukkitVoicechatService service = getServer().getServicesManager().load(BukkitVoicechatService.class);
 
         if (service != null) {
