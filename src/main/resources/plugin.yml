@@ -6,3 +6,8 @@ prefix: CTF
 authors: [ Turboman3000 ]
 description: The CaptureTheFlag Plugin for the Streaming Event "Clash of Streamers"
 website: https://turboman.de
+
+commands:
+  ctf:
+      permission: ctf.command
+      description: The Operator command to control the Game
