@@ -1,0 +1,8 @@
+name: CaptureTheFlag
+version: '1.0-SNAPSHOT'
+main: de.turboman.ctf.CaptureTheFlag
+api-version: '1.21'
+prefix: CTF
+authors: [ Turboman3000 ]
+description: The CaptureTheFlag Plugin for the Streaming Event "Clash of Streamers"
+website: https://turboman.de
