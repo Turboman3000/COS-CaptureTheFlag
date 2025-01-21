@@ -3,7 +3,11 @@ package de.turboman.ctf.commands;
 import de.maxhenkel.voicechat.api.Group;
 import de.maxhenkel.voicechat.api.VoicechatConnection;
 import de.turboman.ctf.CTFTeam;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.title.Title;
+import net.kyori.adventure.title.TitlePart;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -15,7 +19,9 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.time.Duration;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static de.turboman.ctf.CaptureTheFlag.*;
 
@@ -226,56 +232,79 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
         } else {
             switch (args[0]) {
                 case "start" -> {
-                    var world = Objects.requireNonNull(Bukkit.getWorld("world"));
-                    var random = new Random();
-                    var border = world.getWorldBorder();
+                    AtomicInteger sec = new AtomicInteger(4);
 
-                    int x = random.nextInt(((int) (border.getSize() / 2)));
-                    int z = random.nextInt(((int) (border.getSize() / 2)));
+                    Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
+                        sec.getAndDecrement();
 
-                    int cX = border.getCenter().getBlockX();
-                    int cZ = border.getCenter().getBlockZ();
+                        for (var pl : Bukkit.getOnlinePlayers()) {
+                            if (sec.get() >= 1) {
+                                pl.playSound(Sound.sound(Key.key("minecraft:ui.button.click"), Sound.Source.MASTER, 100, sec.get() - 1));
+                            } else {
+                                pl.playSound(Sound.sound(Key.key("minecraft:entity.player.levelup"), Sound.Source.MASTER, 100, 1));
+                            }
 
-                    if (teamList.size() >= 2) {
-                        var loc1 = new Location(world, cX + x + 50, world.getHighestBlockYAt(cX + x + 50, cZ + z + 50), cZ + z + 50);
-                        var loc2 = new Location(world, cX + -x - 50, world.getHighestBlockYAt(cX + -x - 50, cZ + -z - 50), cZ + -z - 50);
-
-                        for (var player : teamList.getFirst().players()) {
-                            var p = Bukkit.getPlayer(player);
-
-                            assert p != null;
-                            p.teleport(loc1);
+                            pl.sendTitlePart(TitlePart.TIMES, Title.Times.times(Duration.ZERO, Duration.ofMillis(1500), Duration.ofMillis(2500)));
+                            pl.sendTitlePart(TitlePart.TITLE, mm.deserialize("<green>" + sec));
+                            pl.sendTitlePart(TitlePart.SUBTITLE, mm.deserialize("<gold>Starting in"));
                         }
 
-                        for (var player : teamList.get(1).players()) {
-                            var p = Bukkit.getPlayer(player);
+                        if (sec.get() != 0) return;
 
-                            assert p != null;
-                            p.teleport(loc2);
+                        Bukkit.getScheduler().cancelTasks(plugin);
+
+                        var world = Objects.requireNonNull(Bukkit.getWorld("world"));
+                        var random = new Random();
+                        var border = world.getWorldBorder();
+
+                        int x = random.nextInt(((int) (border.getSize() / 2)));
+                        int z = random.nextInt(((int) (border.getSize() / 2)));
+
+                        int cX = border.getCenter().getBlockX();
+                        int cZ = border.getCenter().getBlockZ();
+
+                        if (teamList.size() >= 2) {
+                            var loc1 = new Location(world, cX + x + 50, world.getHighestBlockYAt(cX + x + 50, cZ + z + 50), cZ + z + 50);
+                            var loc2 = new Location(world, cX + -x - 50, world.getHighestBlockYAt(cX + -x - 50, cZ + -z - 50), cZ + -z - 50);
+
+                            for (var player : teamList.getFirst().players()) {
+                                var p = Bukkit.getPlayer(player);
+
+                                assert p != null;
+                                p.teleport(loc1);
+                            }
+
+                            for (var player : teamList.get(1).players()) {
+                                var p = Bukkit.getPlayer(player);
+
+                                assert p != null;
+                                p.teleport(loc2);
+                            }
                         }
-                    }
 
-                    if (teamList.size() >= 3) {
-                        var loc = new Location(world, cX + -x - 50, world.getHighestBlockYAt(cX + -x - 50, z + 50), cZ + z + 50);
+                        if (teamList.size() >= 3) {
+                            var loc = new Location(world, cX + -x - 50, world.getHighestBlockYAt(cX + -x - 50, z + 50), cZ + z + 50);
 
-                        for (var player : teamList.get(2).players()) {
-                            var p = Bukkit.getPlayer(player);
+                            for (var player : teamList.get(2).players()) {
+                                var p = Bukkit.getPlayer(player);
 
-                            assert p != null;
-                            p.teleport(loc);
+                                assert p != null;
+                                p.teleport(loc);
+                            }
                         }
-                    }
 
-                    if (teamList.size() >= 4) {
-                        var loc = new Location(world, cX + x + 50, world.getHighestBlockYAt(cX + x + 50, -z - 50), cZ + -z - 50);
+                        if (teamList.size() >= 4) {
+                            var loc = new Location(world, cX + x + 50, world.getHighestBlockYAt(cX + x + 50, -z - 50), cZ + -z - 50);
 
-                        for (var player : teamList.get(3).players()) {
-                            var p = Bukkit.getPlayer(player);
+                            for (var player : teamList.get(3).players()) {
+                                var p = Bukkit.getPlayer(player);
 
-                            assert p != null;
-                            p.teleport(loc);
+                                assert p != null;
+                                p.teleport(loc);
+                            }
                         }
-                    }
+
+                    }, 0, 20);
                 }
                 case "stop" -> {
 
