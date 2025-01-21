@@ -3,6 +3,7 @@ package de.turboman.ctf.commands;
 import de.turboman.ctf.CTFTeam;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -32,7 +33,7 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
                 case "create" -> {
                     if (args.length != 4) break;
 
-                    teamList.add(new CTFTeam(args[2], args[3], new ArrayList<>()));
+                    teamList.add(new CTFTeam(args[2], args[3], new ArrayList<>(), null));
                     sender.sendMessage(mm.deserialize(prefix + "<green>Team <gold>" + args[2] + "<green> created!"));
                 }
                 case "delete" -> {
@@ -51,8 +52,9 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
                     Player player = Bukkit.getPlayer(args[3]);
 
                     for (var t : teamList) {
+                        assert player != null;
                         if (t.players().contains(player.getUniqueId())) {
-                            sender.sendMessage(mm.deserialize(prefix + "<red>" + player.getName() + " is already in a team!"));
+                            sender.sendMessage(mm.deserialize(prefix + "<dark_red>" + player.getName() + "<red> is already in a team!"));
                             break;
                         }
                     }
@@ -75,7 +77,21 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
 
                 }
                 case "leader" -> {
+                    if (args.length != 3) break;
 
+                    for (var t : teamList) {
+                        if (t.name().equals(args[2])) {
+                            if (t.leader() == null) {
+                                sender.sendMessage(mm.deserialize("<red>Team <dark_red>" + t.name() + "<red> doesn't have a leader!"));
+                                break;
+                            }
+
+                            OfflinePlayer player = Bukkit.getOfflinePlayer(t.leader());
+
+                            sender.sendMessage(mm.deserialize("<green>Leader of Team <gold>" + t.name() + "<green> is <gold>" + player.getName()));
+                            break;
+                        }
+                    }
                 }
                 case "list" -> {
                     sender.sendMessage(mm.deserialize(prefix + "<green>List of Teams:"));
@@ -136,6 +152,12 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
                 && args[1].equalsIgnoreCase("add")) {
             for (var p : Bukkit.getOnlinePlayers()) {
                 output.add(p.getName());
+            }
+        } else if (args.length == 3
+                && args[0].equalsIgnoreCase("team")
+                && args[1].equalsIgnoreCase("leader")) {
+            for (var t : teamList) {
+                output.add(t.name());
             }
         }
 
