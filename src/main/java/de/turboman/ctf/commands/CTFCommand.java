@@ -33,6 +33,16 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
                     CaptureTheFlag.teamList.add(new CTFTeam(args[2], args[3], List.of()));
                     sender.sendMessage(mm.deserialize(prefix + "<green>Team <gold>" + args[2] + "<green> created!"));
                 }
+                case "delete" -> {
+                    if (args.length != 3) break;
+
+                    for (var t : CaptureTheFlag.teamList) {
+                        if (t.name().equals(args[2])) {
+                            CaptureTheFlag.teamList.remove(t);
+                            break;
+                        }
+                    }
+                }
                 case "add" -> {
 
                 }
@@ -42,8 +52,15 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
                 case "giveflag" -> {
 
                 }
-                case "list" -> {
+                case "leader" -> {
 
+                }
+                case "list" -> {
+                    sender.sendMessage(mm.deserialize(prefix + "<green>List of Teams:"));
+
+                    for (var t : CaptureTheFlag.teamList) {
+                        sender.sendMessage(mm.deserialize(prefix + "<" + t.color() + ">" + t.name() + "<gray> (" + t.players().size() + ")"));
+                    }
                 }
             }
         }
@@ -61,9 +78,11 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
             output.add("stop");
         } else if (args.length == 2 && args[0].equalsIgnoreCase("team")) {
             output.add("create");
+            output.add("delete");
             output.add("add");
             output.add("remove");
             output.add("giveflag");
+            output.add("leader");
             output.add("list");
         } else if (args.length == 4
                 && args[0].equalsIgnoreCase("team")
