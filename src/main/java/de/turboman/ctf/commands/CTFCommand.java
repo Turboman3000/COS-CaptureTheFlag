@@ -3,10 +3,12 @@ package de.turboman.ctf.commands;
 import de.turboman.ctf.CTFTeam;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -122,7 +124,51 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
                     }
                 }
                 case "giveflag" -> {
+                    if (args.length != 3) break;
 
+                    ItemStack flagItem;
+
+                    boolean noTeam = true;
+
+                    for (var t : teamList) {
+                        if (t.name().equals(args[2])) {
+                            noTeam = false;
+
+                            flagItem = switch(t.color()) {
+                                case "black" -> new ItemStack(Material.BLACK_BANNER);
+                                case "dark_blue" -> new ItemStack(Material.BLUE_BANNER);
+                                case "dark_green" -> new ItemStack(Material.GREEN_BANNER);
+                                case "dark_aqua" -> new ItemStack(Material.CYAN_BANNER);
+                                case "dark_purple" -> new ItemStack(Material.PURPLE_BANNER);
+                                case "gray" -> new ItemStack(Material.LIGHT_GRAY_BANNER);
+                                case "dark_gray" -> new ItemStack(Material.GRAY_BANNER);
+                                case "green" -> new ItemStack(Material.LIME_BANNER);
+                                case "red" -> new ItemStack(Material.RED_BANNER);
+                                case "light_purple" -> new ItemStack(Material.MAGENTA_BANNER);
+                                case "yellow" -> new ItemStack(Material.YELLOW_BANNER);
+                                case "white" -> new ItemStack(Material.WHITE_BANNER);
+                                default -> null;
+                            };
+
+                            var pl = t.leader();
+
+                            if (pl == null) {
+                                pl = t.players().getFirst();
+                            }
+
+                            var player = Bukkit.getPlayer(pl);
+
+                            assert player != null;
+                            player.getInventory().addItem(flagItem);
+
+                            sender.sendMessage(mm.deserialize(prefix + "<green>Gave player <gold>" + player.getName() + "<green> flag for Team <gold>" + t.name()));
+                            break;
+                        }
+                    }
+
+                    if (noTeam) {
+                        sender.sendMessage(mm.deserialize(prefix + "<red>This team doesn't exist!"));
+                    }
                 }
                 case "leader" -> {
                     if (args.length != 3) break;
@@ -178,26 +224,26 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
             output.add("dark_blue");
             output.add("dark_green");
             output.add("dark_aqua");
-            output.add("dark_red");
             output.add("dark_purple");
-            output.add("gold");
             output.add("gray");
             output.add("dark_gray");
             output.add("green");
-            output.add("aqua");
             output.add("red");
             output.add("light_purple");
             output.add("yellow");
             output.add("white");
         } else if (args.length == 3
                 && args[0].equalsIgnoreCase("team")
-                && (args[1].equalsIgnoreCase("add") || args[1].equalsIgnoreCase("remove"))) {
+                && (args[1].equalsIgnoreCase("add")
+                || args[1].equalsIgnoreCase("remove")
+                || args[1].equalsIgnoreCase("giveflag"))) {
             for (var t : teamList) {
                 output.add(t.name());
             }
         } else if (args.length == 4
                 && args[0].equalsIgnoreCase("team")
-                && (args[1].equalsIgnoreCase("add") || args[1].equalsIgnoreCase("remove"))) {
+                && (args[1].equalsIgnoreCase("add")
+                || args[1].equalsIgnoreCase("remove"))) {
             for (var p : Bukkit.getOnlinePlayers()) {
                 output.add(p.getName());
             }
