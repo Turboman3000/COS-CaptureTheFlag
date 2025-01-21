@@ -1,6 +1,5 @@
-package de.turboman.ctf;
+package de.turboman.ctf.maps;
 
-import de.turboman.ctf.maps.MapData;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;

@@ -25,8 +25,8 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static de.turboman.ctf.CaptureTheFlag.*;
-import static de.turboman.ctf.MapManager.getMapItem;
-import static de.turboman.ctf.MapManager.initMap;
+import static de.turboman.ctf.maps.MapManager.getMapItem;
+import static de.turboman.ctf.maps.MapManager.initMap;
 
 public class CTFCommand implements CommandExecutor, TabCompleter {
     private MiniMessage mm = MiniMessage.miniMessage();
