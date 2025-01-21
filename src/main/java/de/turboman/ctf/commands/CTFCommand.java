@@ -3,12 +3,10 @@ package de.turboman.ctf.commands;
 import de.turboman.ctf.CTFTeam;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -24,7 +22,7 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String @NotNull [] args) {
         if (!sender.isOp()) {
-            sender.sendMessage(mm.deserialize("<red>You are not allowed to use this command!"));
+            sender.sendMessage(mm.deserialize(prefix + "<red>You are not allowed to use this command!"));
             return false;
         }
 
@@ -49,7 +47,7 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
                 case "add" -> {
                     if (args.length != 4) break;
 
-                    Player player = Bukkit.getPlayer(args[3]);
+                    var player = Bukkit.getPlayer(args[3]);
 
                     for (var t : teamList) {
                         assert player != null;
@@ -82,13 +80,13 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
                     for (var t : teamList) {
                         if (t.name().equals(args[2])) {
                             if (t.leader() == null) {
-                                sender.sendMessage(mm.deserialize("<red>Team <dark_red>" + t.name() + "<red> doesn't have a leader!"));
+                                sender.sendMessage(mm.deserialize(prefix + "<red>Team <dark_red>" + t.name() + "<red> doesn't have a leader!"));
                                 break;
                             }
 
-                            OfflinePlayer player = Bukkit.getOfflinePlayer(t.leader());
+                            var player = Bukkit.getOfflinePlayer(t.leader());
 
-                            sender.sendMessage(mm.deserialize("<green>Leader of Team <gold>" + t.name() + "<green> is <gold>" + player.getName()));
+                            sender.sendMessage(mm.deserialize(prefix + "<green>Leader of Team <gold>" + t.name() + "<green> is <gold>" + player.getName()));
                             break;
                         }
                     }
