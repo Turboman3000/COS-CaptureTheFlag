@@ -1,5 +1,7 @@
 package de.turboman.ctf.commands;
 
+import de.turboman.ctf.CTFTeam;
+import de.turboman.ctf.CaptureTheFlag;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -21,10 +23,15 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
             return false;
         }
 
-        if (args.length == 2 && args[0].equalsIgnoreCase("team")) {
+        if (args.length >= 2 && args[0].equalsIgnoreCase("team")) {
             switch (args[1]) {
                 case "create" -> {
+                    System.out.println(args.length);
 
+                    if (args.length != 4) break;
+
+                    CaptureTheFlag.teamList.add(new CTFTeam(args[2], args[3], List.of()));
+                    sender.sendMessage(mm.deserialize("<green>Team " + args[2] + " created!"));
                 }
                 case "add" -> {
 
@@ -58,6 +65,24 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
             output.add("remove");
             output.add("giveflag");
             output.add("list");
+        } else if (args.length == 4
+                && args[0].equalsIgnoreCase("team")
+                && args[1].equalsIgnoreCase("create")) {
+            output.add("black");
+            output.add("dark_blue");
+            output.add("dark_green");
+            output.add("dark_aqua");
+            output.add("dark_red");
+            output.add("dark_purple");
+            output.add("gold");
+            output.add("gray");
+            output.add("dark_gray");
+            output.add("green");
+            output.add("aqua");
+            output.add("red");
+            output.add("light_purple");
+            output.add("yellow");
+            output.add("white");
         }
 
         return output;
