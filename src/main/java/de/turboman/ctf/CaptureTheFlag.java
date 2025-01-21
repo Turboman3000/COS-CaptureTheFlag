@@ -3,6 +3,7 @@ package de.turboman.ctf;
 import de.maxhenkel.voicechat.api.BukkitVoicechatService;
 import de.maxhenkel.voicechat.api.VoicechatServerApi;
 import de.turboman.ctf.commands.CTFCommand;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -12,6 +13,9 @@ import java.util.Objects;
 public final class CaptureTheFlag extends JavaPlugin {
     public static ArrayList<CTFTeam> teamList = new ArrayList<>();
     public static VoicechatServerApi voicechatAPI;
+    public static final String prefix = "<dark_aqua>Capture the Flag <gold>⇒<reset> ";
+
+    private MiniMessage mm = MiniMessage.miniMessage();
 
     @Override
     public void onEnable() {
@@ -19,12 +23,12 @@ public final class CaptureTheFlag extends JavaPlugin {
 
         if (service != null) {
             service.registerPlugin(new VoicechatPlugin());
-
-            Objects.requireNonNull(getCommand("ctf")).setExecutor(new CTFCommand());
-            
-            Bukkit.getConsoleSender().sendMessage("[CTF] Plugin enabled");
         } else {
-            Bukkit.getConsoleSender().sendMessage("[CTF] VoiceChat plugin not found");
+            Bukkit.getConsoleSender().sendMessage(mm.deserialize(prefix + "<red>VoiceChat plugin not found"));
         }
+
+        Objects.requireNonNull(getCommand("ctf")).setExecutor(new CTFCommand());
+
+        Bukkit.getConsoleSender().sendMessage(mm.deserialize(prefix + "<green>Plugin enabled"));
     }
 }
