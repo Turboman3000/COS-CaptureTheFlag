@@ -81,7 +81,45 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
                     }
                 }
                 case "remove" -> {
+                    if (args.length != 4) break;
 
+                    var player = Bukkit.getPlayer(args[3]);
+                    boolean noPlayerInTeam = true;
+
+                    for (var t : teamList) {
+                        assert player != null;
+                        if (t.players().contains(player.getUniqueId())) {
+                            noPlayerInTeam = false;
+                            break;
+                        }
+                    }
+
+                    if (noPlayerInTeam) {
+                        sender.sendMessage(mm.deserialize(prefix + "<dark_red>" + player.getName() + "<red> is not in a team!"));
+                    }
+
+                    boolean noTeam = true;
+
+                    for (var t : teamList) {
+                        if (t.name().equals(args[2])) {
+                            noTeam = false;
+                            t.players().remove(player.getUniqueId());
+
+                            var playerName = mm.deserialize(player.getName());
+
+                            player.customName(playerName);
+                            player.playerListName(playerName);
+                            player.displayName(playerName);
+
+                            sender.sendMessage(mm.deserialize(prefix + "<green>Removed player <gold>" + player.getName() + "<green> from the Team: <gold>" + t.name()));
+                            player.sendMessage(mm.deserialize(prefix + "<green>You are removed from Team: <gold>" + t.name()));
+                            break;
+                        }
+                    }
+
+                    if (noTeam) {
+                        sender.sendMessage(mm.deserialize(prefix + "<red>This team doesn't exist!"));
+                    }
                 }
                 case "giveflag" -> {
 
@@ -153,13 +191,13 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
             output.add("white");
         } else if (args.length == 3
                 && args[0].equalsIgnoreCase("team")
-                && args[1].equalsIgnoreCase("add")) {
+                && (args[1].equalsIgnoreCase("add") || args[1].equalsIgnoreCase("remove"))) {
             for (var t : teamList) {
                 output.add(t.name());
             }
         } else if (args.length == 4
                 && args[0].equalsIgnoreCase("team")
-                && args[1].equalsIgnoreCase("add")) {
+                && (args[1].equalsIgnoreCase("add") || args[1].equalsIgnoreCase("remove"))) {
             for (var p : Bukkit.getOnlinePlayers()) {
                 output.add(p.getName());
             }
