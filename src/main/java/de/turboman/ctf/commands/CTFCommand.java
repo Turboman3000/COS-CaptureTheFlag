@@ -57,16 +57,27 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
                         }
                     }
 
+                    boolean noTeam = true;
+
                     for (var t : teamList) {
                         if (t.name().equals(args[2])) {
+                            noTeam = false;
                             t.players().add(player.getUniqueId());
+
+                            var playerName = mm.deserialize("<" + t.color() + ">" + player.getName());
+
+                            player.playerListName(playerName);
+                            player.displayName(playerName);
+
                             sender.sendMessage(mm.deserialize(prefix + "<green>Added player <gold>" + player.getName() + "<green> to the Team: <gold>" + t.name()));
                             player.sendMessage(mm.deserialize(prefix + "<green>You are now in Team: <gold>" + t.name()));
                             break;
                         }
                     }
 
-                    sender.sendMessage(mm.deserialize(prefix + "<red>This team doesn't exist!"));
+                    if (noTeam) {
+                        sender.sendMessage(mm.deserialize(prefix + "<red>This team doesn't exist!"));
+                    }
                 }
                 case "remove" -> {
 
