@@ -257,15 +257,15 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
                         var random = new Random();
                         var border = world.getWorldBorder();
 
-                        int x = random.nextInt(((int) (border.getSize() / 2)));
-                        int z = random.nextInt(((int) (border.getSize() / 2)));
-
-                        int cX = border.getCenter().getBlockX();
-                        int cZ = border.getCenter().getBlockZ();
-
                         if (teamList.size() >= 2) {
-                            var loc1 = new Location(world, cX + x + 50, world.getHighestBlockYAt(cX + x + 50, cZ + z + 50), cZ + z + 50);
-                            var loc2 = new Location(world, cX + -x - 50, world.getHighestBlockYAt(cX + -x - 50, cZ + -z - 50), cZ + -z - 50);
+                            var x1 = border.getCenter().getBlockX() + random.nextInt((int) (border.getSize() / 2));
+                            var z1 = border.getCenter().getBlockZ() + random.nextInt((int) (border.getSize() / 2));
+
+                            var x2 = border.getCenter().getBlockX() - random.nextInt((int) (border.getSize() / 2));
+                            var z2 = border.getCenter().getBlockZ() - random.nextInt((int) (border.getSize() / 2));
+
+                            var loc1 = new Location(world, x1, world.getHighestBlockYAt(x1, z1), z1);
+                            var loc2 = new Location(world, x2, world.getHighestBlockYAt(x2, z2), z2);
 
                             for (var player : teamList.getFirst().players()) {
                                 var p = Bukkit.getPlayer(player);
@@ -283,27 +283,32 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
                         }
 
                         if (teamList.size() >= 3) {
-                            var loc = new Location(world, cX + -x - 50, world.getHighestBlockYAt(cX + -x - 50, z + 50), cZ + z + 50);
+                            var x = border.getCenter().getBlockX() + random.nextInt((int) (border.getSize() / 2));
+                            var z = border.getCenter().getBlockZ() - random.nextInt((int) (border.getSize() / 2));
+
+                            var loc1 = new Location(world, x, world.getHighestBlockYAt(x, z), z);
 
                             for (var player : teamList.get(2).players()) {
                                 var p = Bukkit.getPlayer(player);
 
                                 assert p != null;
-                                p.teleport(loc);
+                                p.teleport(loc1);
                             }
                         }
 
                         if (teamList.size() >= 4) {
-                            var loc = new Location(world, cX + x + 50, world.getHighestBlockYAt(cX + x + 50, -z - 50), cZ + -z - 50);
+                            var x = border.getCenter().getBlockX() - random.nextInt((int) (border.getSize() / 2));
+                            var z = border.getCenter().getBlockZ() + random.nextInt((int) (border.getSize() / 2));
+
+                            var loc1 = new Location(world, x, world.getHighestBlockYAt(x, z), z);
 
                             for (var player : teamList.get(3).players()) {
                                 var p = Bukkit.getPlayer(player);
 
                                 assert p != null;
-                                p.teleport(loc);
+                                p.teleport(loc1);
                             }
                         }
-
                     }, 0, 20);
                 }
                 case "stop" -> {
