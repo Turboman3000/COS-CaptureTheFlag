@@ -1,8 +1,7 @@
 package de.turboman.ctf;
 
-import org.bukkit.entity.Player;
-
 import java.util.List;
+import java.util.UUID;
 
-public record CTFTeam(String name, String color, List<Player> players) {
+public record CTFTeam(String name, String color, List<UUID> players) {
 }
