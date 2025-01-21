@@ -66,6 +66,7 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
 
                             var playerName = mm.deserialize("<" + t.color() + ">" + player.getName());
 
+                            player.customName(playerName);
                             player.playerListName(playerName);
                             player.displayName(playerName);
 
