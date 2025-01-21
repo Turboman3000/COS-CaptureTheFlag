@@ -1,5 +1,7 @@
 package de.turboman.ctf.commands;
 
+import de.maxhenkel.voicechat.api.Group;
+import de.maxhenkel.voicechat.api.VoicechatConnection;
 import de.turboman.ctf.CTFTeam;
 import de.turboman.ctf.CaptureTheFlag;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -7,11 +9,13 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class CTFCommand implements CommandExecutor, TabCompleter {
     private MiniMessage mm = MiniMessage.miniMessage();
@@ -26,12 +30,10 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
         if (args.length >= 2 && args[0].equalsIgnoreCase("team")) {
             switch (args[1]) {
                 case "create" -> {
-                    System.out.println(args.length);
-
                     if (args.length != 4) break;
 
                     CaptureTheFlag.teamList.add(new CTFTeam(args[2], args[3], List.of()));
-                    sender.sendMessage(mm.deserialize("<green>Team " + args[2] + " created!"));
+                    sender.sendMessage(mm.deserialize("<green>Team <gold>" + args[2] + "<green> created!"));
                 }
                 case "add" -> {
 
