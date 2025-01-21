@@ -16,8 +16,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.MapMeta;
-import org.bukkit.map.MapView;
+import org.bukkit.map.MapCursor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -26,6 +25,8 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static de.turboman.ctf.CaptureTheFlag.*;
+import static de.turboman.ctf.MapManager.getMapItem;
+import static de.turboman.ctf.MapManager.initMap;
 
 public class CTFCommand implements CommandExecutor, TabCompleter {
     private MiniMessage mm = MiniMessage.miniMessage();
@@ -42,14 +43,7 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
                 case "create" -> {
                     if (args.length != 4) break;
 
-                    var group = voicechatAPI.groupBuilder()
-                            .setHidden(true)
-                            .setId(UUID.randomUUID())
-                            .setName(args[2])
-                            .setType(Group.Type.OPEN)
-                            .setPersistent(true)
-                            .setPassword(UUID.randomUUID().toString().replace("-", ""))
-                            .build();
+                    var group = voicechatAPI.groupBuilder().setHidden(true).setId(UUID.randomUUID()).setName(args[2]).setType(Group.Type.OPEN).setPersistent(true).setPassword(UUID.randomUUID().toString().replace("-", "")).build();
 
                     teamList.add(new CTFTeam(args[2], args[3], new ArrayList<>(), group));
                     sender.sendMessage(mm.deserialize(prefix + "<green>Team <gold>" + args[2] + "<green> created!"));
@@ -257,23 +251,10 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
                             for (var pid : t.players()) {
                                 var player = Bukkit.getPlayer(pid);
 
-                                ItemStack mapItem = new ItemStack(Material.FILLED_MAP);
-                                MapMeta meta = (MapMeta) mapItem.getItemMeta();
-                                MapView view = Bukkit.createMap(world);
-
                                 assert player != null;
+                                initMap(player);
 
-                                view.setCenterX(border.getCenter().getBlockX());
-                                view.setCenterZ(border.getCenter().getBlockZ());
-
-                                view.setScale(MapView.Scale.NORMAL);
-                                view.setUnlimitedTracking(true);
-                                view.setTrackingPosition(true);
-
-                                meta.setMapView(view);
-                                mapItem.setItemMeta(meta);
-
-                                player.getInventory().setItemInOffHand(mapItem);
+                                player.getInventory().setItemInOffHand(getMapItem(pid));
                             }
 
                             var leaderID = t.players().get(random.nextInt(t.players().size()));
@@ -291,7 +272,6 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
 
                             assert leader != null;
                             leader.getInventory().addItem(flagItem);
-                            break;
                         }
                     }, 0, 20);
                 }
@@ -322,6 +302,24 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
         };
     }
 
+    private static @Nullable MapCursor.Type getDecoColor(CTFTeam t) {
+        return switch (t.color()) {
+            case "black" -> MapCursor.Type.BANNER_BLACK;
+            case "dark_blue" -> MapCursor.Type.BANNER_BLUE;
+            case "dark_green" -> MapCursor.Type.BANNER_GREEN;
+            case "dark_aqua" -> MapCursor.Type.BANNER_CYAN;
+            case "dark_purple" -> MapCursor.Type.BANNER_PURPLE;
+            case "gray" -> MapCursor.Type.BANNER_LIGHT_GRAY;
+            case "dark_gray" -> MapCursor.Type.BANNER_GRAY;
+            case "green" -> MapCursor.Type.BANNER_LIME;
+            case "red" -> MapCursor.Type.BANNER_RED;
+            case "light_purple" -> MapCursor.Type.BANNER_MAGENTA;
+            case "yellow" -> MapCursor.Type.BANNER_YELLOW;
+            case "white" -> MapCursor.Type.BANNER_WHITE;
+            default -> null;
+        };
+    }
+
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String @NotNull [] args) {
         var output = new ArrayList<String>();
@@ -330,17 +328,14 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
             output.add("team");
             output.add("start");
             output.add("stop");
-        } else if (args.length == 2
-                && args[0].equalsIgnoreCase("team")) {
+        } else if (args.length == 2 && args[0].equalsIgnoreCase("team")) {
             output.add("create");
             output.add("delete");
             output.add("add");
             output.add("remove");
             output.add("leader");
             output.add("list");
-        } else if (args.length == 4
-                && args[0].equalsIgnoreCase("team")
-                && args[1].equalsIgnoreCase("create")) {
+        } else if (args.length == 4 && args[0].equalsIgnoreCase("team") && args[1].equalsIgnoreCase("create")) {
             output.add("black");
             output.add("dark_blue");
             output.add("dark_green");
@@ -353,24 +348,15 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
             output.add("light_purple");
             output.add("yellow");
             output.add("white");
-        } else if (args.length == 3
-                && args[0].equalsIgnoreCase("team")
-                && (args[1].equalsIgnoreCase("add")
-                || args[1].equalsIgnoreCase("remove")
-                || args[1].equalsIgnoreCase("giveflag"))) {
+        } else if (args.length == 3 && args[0].equalsIgnoreCase("team") && (args[1].equalsIgnoreCase("add") || args[1].equalsIgnoreCase("remove") || args[1].equalsIgnoreCase("giveflag"))) {
             for (var t : teamList) {
                 output.add(t.name());
             }
-        } else if (args.length == 4
-                && args[0].equalsIgnoreCase("team")
-                && (args[1].equalsIgnoreCase("add")
-                || args[1].equalsIgnoreCase("remove"))) {
+        } else if (args.length == 4 && args[0].equalsIgnoreCase("team") && (args[1].equalsIgnoreCase("add") || args[1].equalsIgnoreCase("remove"))) {
             for (var p : Bukkit.getOnlinePlayers()) {
                 output.add(p.getName());
             }
-        } else if (args.length == 3
-                && args[0].equalsIgnoreCase("team")
-                && args[1].equalsIgnoreCase("leader")) {
+        } else if (args.length == 3 && args[0].equalsIgnoreCase("team") && args[1].equalsIgnoreCase("leader")) {
             for (var t : teamList) {
                 output.add(t.name());
             }
