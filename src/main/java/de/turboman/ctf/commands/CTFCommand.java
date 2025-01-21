@@ -49,7 +49,7 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
                             .setPassword(UUID.randomUUID().toString().replace("-", ""))
                             .build();
 
-                    teamList.add(new CTFTeam(args[2], args[3], new ArrayList<>(), null, group));
+                    teamList.add(new CTFTeam(args[2], args[3], new ArrayList<>(), group));
                     sender.sendMessage(mm.deserialize(prefix + "<green>Team <gold>" + args[2] + "<green> created!"));
                 }
                 case "delete" -> {
@@ -144,66 +144,6 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
                         sender.sendMessage(mm.deserialize(prefix + "<red>This team doesn't exist!"));
                     }
                 }
-                case "giveflag" -> {
-                    if (args.length != 3) break;
-
-                    ItemStack flagItem;
-
-                    boolean noTeam = true;
-
-                    for (var t : teamList) {
-                        if (t.name().equals(args[2])) {
-                            noTeam = false;
-
-                            flagItem = switch (t.color()) {
-                                case "black" -> new ItemStack(Material.BLACK_BANNER);
-                                case "dark_blue" -> new ItemStack(Material.BLUE_BANNER);
-                                case "dark_green" -> new ItemStack(Material.GREEN_BANNER);
-                                case "dark_aqua" -> new ItemStack(Material.CYAN_BANNER);
-                                case "dark_purple" -> new ItemStack(Material.PURPLE_BANNER);
-                                case "gray" -> new ItemStack(Material.LIGHT_GRAY_BANNER);
-                                case "dark_gray" -> new ItemStack(Material.GRAY_BANNER);
-                                case "green" -> new ItemStack(Material.LIME_BANNER);
-                                case "red" -> new ItemStack(Material.RED_BANNER);
-                                case "light_purple" -> new ItemStack(Material.MAGENTA_BANNER);
-                                case "yellow" -> new ItemStack(Material.YELLOW_BANNER);
-                                case "white" -> new ItemStack(Material.WHITE_BANNER);
-                                default -> null;
-                            };
-
-                            assert flagItem != null;
-                            var meta = flagItem.getItemMeta();
-
-                            meta.displayName(mm.deserialize("<!i><" + t.color() + "> " + t.name() + "'s Flag"));
-                            flagItem.setItemMeta(meta);
-
-                            /*
-                            var str = Objects.requireNonNull(meta.displayName()).toString()
-                                    .replace("TextComponentImpl{content=\" ", "");
-
-                            str = str.split(Pattern.quote("\", style=StyleImpl{"))[0].replace("'s Flag", "");
-                             */
-
-                            var pl = t.leader();
-
-                            if (pl == null) {
-                                pl = t.players().getFirst();
-                            }
-
-                            var player = Bukkit.getPlayer(pl);
-
-                            assert player != null;
-                            player.getInventory().addItem(flagItem);
-
-                            sender.sendMessage(mm.deserialize(prefix + "<green>Gave player <gold>" + player.getName() + "<green> flag for Team <gold>" + t.name()));
-                            break;
-                        }
-                    }
-
-                    if (noTeam) {
-                        sender.sendMessage(mm.deserialize(prefix + "<red>This team doesn't exist!"));
-                    }
-                }
                 case "leader" -> {
                     if (args.length != 3) break;
 
@@ -250,11 +190,30 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
                         }
 
                         if (sec.get() != 0) return;
+                        var random = new Random();
 
                         Bukkit.getScheduler().cancelTasks(plugin);
 
+                        for (var t : teamList) {
+                            var leaderID = t.players().get(random.nextInt(t.players().size()));
+                            var leader = Bukkit.getPlayer(leaderID);
+
+                            ItemStack flagItem = getFlagItem(t);
+
+                            assert flagItem != null;
+                            var meta = flagItem.getItemMeta();
+
+                            meta.displayName(mm.deserialize("<!i><" + t.color() + "> " + t.name() + "'s Flag"));
+                            flagItem.setItemMeta(meta);
+
+                            t.leader(leaderID);
+
+                            assert leader != null;
+                            leader.getInventory().addItem(flagItem);
+                            break;
+                        }
+
                         var world = Objects.requireNonNull(Bukkit.getWorld("world"));
-                        var random = new Random();
                         var border = world.getWorldBorder();
 
                         if (teamList.size() >= 2) {
@@ -320,6 +279,24 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
         return true;
     }
 
+    private static @Nullable ItemStack getFlagItem(CTFTeam t) {
+        return switch (t.color()) {
+            case "black" -> new ItemStack(Material.BLACK_BANNER);
+            case "dark_blue" -> new ItemStack(Material.BLUE_BANNER);
+            case "dark_green" -> new ItemStack(Material.GREEN_BANNER);
+            case "dark_aqua" -> new ItemStack(Material.CYAN_BANNER);
+            case "dark_purple" -> new ItemStack(Material.PURPLE_BANNER);
+            case "gray" -> new ItemStack(Material.LIGHT_GRAY_BANNER);
+            case "dark_gray" -> new ItemStack(Material.GRAY_BANNER);
+            case "green" -> new ItemStack(Material.LIME_BANNER);
+            case "red" -> new ItemStack(Material.RED_BANNER);
+            case "light_purple" -> new ItemStack(Material.MAGENTA_BANNER);
+            case "yellow" -> new ItemStack(Material.YELLOW_BANNER);
+            case "white" -> new ItemStack(Material.WHITE_BANNER);
+            default -> null;
+        };
+    }
+
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String @NotNull [] args) {
         var output = new ArrayList<String>();
@@ -334,7 +311,6 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
             output.add("delete");
             output.add("add");
             output.add("remove");
-            output.add("giveflag");
             output.add("leader");
             output.add("list");
         } else if (args.length == 4
