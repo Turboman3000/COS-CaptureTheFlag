@@ -2,7 +2,10 @@ package de.turboman.ctf;
 
 import de.maxhenkel.voicechat.api.VoicechatApi;
 import de.maxhenkel.voicechat.api.events.EventRegistration;
+import de.maxhenkel.voicechat.api.events.LeaveGroupEvent;
 import de.maxhenkel.voicechat.api.events.VoicechatServerStartedEvent;
+
+import java.util.Objects;
 
 public class VoicechatPlugin implements de.maxhenkel.voicechat.api.VoicechatPlugin {
 
@@ -14,6 +17,13 @@ public class VoicechatPlugin implements de.maxhenkel.voicechat.api.VoicechatPlug
     @Override
     public void registerEvents(EventRegistration registration) {
         registration.registerEvent(VoicechatServerStartedEvent.class, this::onServerStarted);
+        registration.registerEvent(LeaveGroupEvent.class, this::onGroupLeave);
+    }
+
+    private void onGroupLeave(LeaveGroupEvent event) {
+        if (Objects.requireNonNull(event.getGroup()).isHidden() && event.getGroup().isPersistent()) {
+            event.cancel();
+        }
     }
 
     private void onServerStarted(VoicechatServerStartedEvent event) {
