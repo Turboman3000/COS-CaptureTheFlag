@@ -3,17 +3,22 @@ package de.turboman.ctf.commands;
 import de.turboman.ctf.CTFTeam;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Random;
 
 import static de.turboman.ctf.CaptureTheFlag.prefix;
 import static de.turboman.ctf.CaptureTheFlag.teamList;
@@ -134,7 +139,7 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
                         if (t.name().equals(args[2])) {
                             noTeam = false;
 
-                            flagItem = switch(t.color()) {
+                            flagItem = switch (t.color()) {
                                 case "black" -> new ItemStack(Material.BLACK_BANNER);
                                 case "dark_blue" -> new ItemStack(Material.BLUE_BANNER);
                                 case "dark_green" -> new ItemStack(Material.GREEN_BANNER);
@@ -149,6 +154,19 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
                                 case "white" -> new ItemStack(Material.WHITE_BANNER);
                                 default -> null;
                             };
+
+                            assert flagItem != null;
+                            var meta = flagItem.getItemMeta();
+
+                            meta.displayName(mm.deserialize("<!i><" + t.color() + "> " + t.name() + "'s Flag"));
+                            flagItem.setItemMeta(meta);
+
+                            /*
+                            var str = Objects.requireNonNull(meta.displayName()).toString()
+                                    .replace("TextComponentImpl{content=\" ", "");
+
+                            str = str.split(Pattern.quote("\", style=StyleImpl{"))[0].replace("'s Flag", "");
+                             */
 
                             var pl = t.leader();
 
@@ -193,6 +211,66 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
                     for (var t : teamList) {
                         sender.sendMessage(mm.deserialize(prefix + "<" + t.color() + ">" + t.name() + "<gray> (" + t.players().size() + ")"));
                     }
+                }
+            }
+        } else {
+            switch (args[0]) {
+                case "start" -> {
+                    var world = Objects.requireNonNull(Bukkit.getWorld("world"));
+                    var random = new Random();
+                    var border = world.getWorldBorder();
+
+                    var x = random.nextInt(((int) (border.getSize() / 2) - 50));
+                    var z = random.nextInt(((int) (border.getSize() / 2) - 50));
+
+                    for (var player : Bukkit.getOnlinePlayers()) {
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, Integer.MAX_VALUE, 6, false, false, false));
+                    }
+
+
+                    if (teamList.size() >= 2) {
+                        var loc1 = new Location(world, x + 50, world.getHighestBlockYAt(x + 50, z + 50), z + 50);
+                        var loc2 = new Location(world, -(x + 50), world.getHighestBlockYAt(-(x + 50), -(z + 50)), -(z + 50));
+
+                        for (var player : teamList.getFirst().players()) {
+                            var p = Bukkit.getPlayer(player);
+
+                            assert p != null;
+                            p.teleport(loc1);
+                        }
+
+                        for (var player : teamList.get(1).players()) {
+                            var p = Bukkit.getPlayer(player);
+
+                            assert p != null;
+                            p.teleport(loc2);
+                        }
+                    }
+
+                    if (teamList.size() >= 3) {
+                        var loc = new Location(world, -(x + 50), world.getHighestBlockYAt(-(x + 50), z + 50), z + 50);
+
+                        for (var player : teamList.get(2).players()) {
+                            var p = Bukkit.getPlayer(player);
+
+                            assert p != null;
+                            p.teleport(loc);
+                        }
+                    }
+
+                    if (teamList.size() >= 4) {
+                        var loc = new Location(world, x + 50, world.getHighestBlockYAt(x + 50, -(z + 50)), -(z + 50));
+
+                        for (var player : teamList.get(3).players()) {
+                            var p = Bukkit.getPlayer(player);
+
+                            assert p != null;
+                            p.teleport(loc);
+                        }
+                    }
+                }
+                case "stop" -> {
+
                 }
             }
         }
