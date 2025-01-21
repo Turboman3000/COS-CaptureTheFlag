@@ -21,7 +21,7 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String @NotNull [] args) {
-        if (!sender.isOp()) {
+        if (!(sender.isOp() || sender.hasPermission("ctf.command"))) {
             sender.sendMessage(mm.deserialize(prefix + "<red>You are not allowed to use this command!"));
             return false;
         }
