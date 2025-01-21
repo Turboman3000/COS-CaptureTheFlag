@@ -16,6 +16,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.MapMeta;
+import org.bukkit.map.MapView;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -190,30 +192,12 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
                         }
 
                         if (sec.get() != 0) return;
+
                         var random = new Random();
+                        var world = Objects.requireNonNull(Bukkit.getWorld("world"));
 
                         Bukkit.getScheduler().cancelTasks(plugin);
 
-                        for (var t : teamList) {
-                            var leaderID = t.players().get(random.nextInt(t.players().size()));
-                            var leader = Bukkit.getPlayer(leaderID);
-
-                            ItemStack flagItem = getFlagItem(t);
-
-                            assert flagItem != null;
-                            var meta = flagItem.getItemMeta();
-
-                            meta.displayName(mm.deserialize("<!i><" + t.color() + ">" + t.name() + "'s Flag"));
-                            flagItem.setItemMeta(meta);
-
-                            t.leader(leaderID);
-
-                            assert leader != null;
-                            leader.getInventory().addItem(flagItem);
-                            break;
-                        }
-
-                        var world = Objects.requireNonNull(Bukkit.getWorld("world"));
                         var border = world.getWorldBorder();
 
                         if (teamList.size() >= 2) {
@@ -267,6 +251,47 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
                                 assert p != null;
                                 p.teleport(loc1);
                             }
+                        }
+
+                        for (var t : teamList) {
+                            for (var pid : t.players()) {
+                                var player = Bukkit.getPlayer(pid);
+
+                                ItemStack mapItem = new ItemStack(Material.FILLED_MAP);
+                                MapMeta meta = (MapMeta) mapItem.getItemMeta();
+                                MapView view = Bukkit.createMap(world);
+
+                                assert player != null;
+
+                                view.setCenterX(border.getCenter().getBlockX());
+                                view.setCenterZ(border.getCenter().getBlockZ());
+
+                                view.setScale(MapView.Scale.NORMAL);
+                                view.setUnlimitedTracking(true);
+                                view.setTrackingPosition(true);
+
+                                meta.setMapView(view);
+                                mapItem.setItemMeta(meta);
+
+                                player.getInventory().setItemInOffHand(mapItem);
+                            }
+
+                            var leaderID = t.players().get(random.nextInt(t.players().size()));
+                            var leader = Bukkit.getPlayer(leaderID);
+
+                            ItemStack flagItem = getFlagItem(t);
+
+                            assert flagItem != null;
+                            var meta = flagItem.getItemMeta();
+
+                            meta.displayName(mm.deserialize("<!i><" + t.color() + ">" + t.name() + "'s Flag"));
+                            flagItem.setItemMeta(meta);
+
+                            t.leader(leaderID);
+
+                            assert leader != null;
+                            leader.getInventory().addItem(flagItem);
+                            break;
                         }
                     }, 0, 20);
                 }
