@@ -32,7 +32,7 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
                 case "create" -> {
                     if (args.length != 4) break;
 
-                    teamList.add(new CTFTeam(args[2], args[3], List.of()));
+                    teamList.add(new CTFTeam(args[2], args[3], new ArrayList<>()));
                     sender.sendMessage(mm.deserialize(prefix + "<green>Team <gold>" + args[2] + "<green> created!"));
                 }
                 case "delete" -> {
