@@ -1,5 +1,7 @@
 package de.turboman.ctf.commands;
 
+import de.maxhenkel.voicechat.api.Group;
+import de.maxhenkel.voicechat.api.VoicechatConnection;
 import de.turboman.ctf.CTFTeam;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
@@ -10,18 +12,12 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
 
-import static de.turboman.ctf.CaptureTheFlag.prefix;
-import static de.turboman.ctf.CaptureTheFlag.teamList;
+import static de.turboman.ctf.CaptureTheFlag.*;
 
 public class CTFCommand implements CommandExecutor, TabCompleter {
     private MiniMessage mm = MiniMessage.miniMessage();
@@ -38,7 +34,16 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
                 case "create" -> {
                     if (args.length != 4) break;
 
-                    teamList.add(new CTFTeam(args[2], args[3], new ArrayList<>(), null));
+                    var group = voicechatAPI.groupBuilder()
+                            .setHidden(true)
+                            .setId(UUID.randomUUID())
+                            .setName(args[2])
+                            .setType(Group.Type.OPEN)
+                            .setPersistent(true)
+                            .setPassword(UUID.randomUUID().toString().replace("-", ""))
+                            .build();
+
+                    teamList.add(new CTFTeam(args[2], args[3], new ArrayList<>(), null, group));
                     sender.sendMessage(mm.deserialize(prefix + "<green>Team <gold>" + args[2] + "<green> created!"));
                 }
                 case "delete" -> {
@@ -76,6 +81,11 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
                             player.customName(playerName);
                             player.playerListName(playerName);
                             player.displayName(playerName);
+
+                            VoicechatConnection connection = voicechatAPI.getConnectionOf(player.getUniqueId());
+
+                            assert connection != null;
+                            connection.setGroup(t.voiceGroup());
 
                             sender.sendMessage(mm.deserialize(prefix + "<green>Added player <gold>" + player.getName() + "<green> to the Team: <gold>" + t.name()));
                             player.sendMessage(mm.deserialize(prefix + "<green>You are now in Team: <gold>" + t.name()));
@@ -220,17 +230,15 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
                     var random = new Random();
                     var border = world.getWorldBorder();
 
-                    var x = random.nextInt(((int) (border.getSize() / 2) - 50));
-                    var z = random.nextInt(((int) (border.getSize() / 2) - 50));
+                    int x = random.nextInt(((int) (border.getSize() / 2)));
+                    int z = random.nextInt(((int) (border.getSize() / 2)));
 
-                    for (var player : Bukkit.getOnlinePlayers()) {
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, Integer.MAX_VALUE, 6, false, false, false));
-                    }
-
+                    int cX = border.getCenter().getBlockX();
+                    int cZ = border.getCenter().getBlockZ();
 
                     if (teamList.size() >= 2) {
-                        var loc1 = new Location(world, x + 50, world.getHighestBlockYAt(x + 50, z + 50), z + 50);
-                        var loc2 = new Location(world, -(x + 50), world.getHighestBlockYAt(-(x + 50), -(z + 50)), -(z + 50));
+                        var loc1 = new Location(world, cX + x + 50, world.getHighestBlockYAt(cX + x + 50, cZ + z + 50), cZ + z + 50);
+                        var loc2 = new Location(world, cX + -x - 50, world.getHighestBlockYAt(cX + -x - 50, cZ + -z - 50), cZ + -z - 50);
 
                         for (var player : teamList.getFirst().players()) {
                             var p = Bukkit.getPlayer(player);
@@ -248,7 +256,7 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
                     }
 
                     if (teamList.size() >= 3) {
-                        var loc = new Location(world, -(x + 50), world.getHighestBlockYAt(-(x + 50), z + 50), z + 50);
+                        var loc = new Location(world, cX + -x - 50, world.getHighestBlockYAt(cX + -x - 50, z + 50), cZ + z + 50);
 
                         for (var player : teamList.get(2).players()) {
                             var p = Bukkit.getPlayer(player);
@@ -259,7 +267,7 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
                     }
 
                     if (teamList.size() >= 4) {
-                        var loc = new Location(world, x + 50, world.getHighestBlockYAt(x + 50, -(z + 50)), -(z + 50));
+                        var loc = new Location(world, cX + x + 50, world.getHighestBlockYAt(cX + x + 50, -z - 50), cZ + -z - 50);
 
                         for (var player : teamList.get(3).players()) {
                             var p = Bukkit.getPlayer(player);
