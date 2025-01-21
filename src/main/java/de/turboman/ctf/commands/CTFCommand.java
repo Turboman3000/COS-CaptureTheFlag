@@ -203,7 +203,7 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
                             assert flagItem != null;
                             var meta = flagItem.getItemMeta();
 
-                            meta.displayName(mm.deserialize("<!i><" + t.color() + "> " + t.name() + "'s Flag"));
+                            meta.displayName(mm.deserialize("<!i><" + t.color() + ">" + t.name() + "'s Flag"));
                             flagItem.setItemMeta(meta);
 
                             t.leader(leaderID);
