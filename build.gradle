@@ -1,6 +1,5 @@
 plugins {
     id 'java'
-    id 'com.gradleup.shadow' version "8.3.0"
 }
 
 group = 'de.turboman'
@@ -24,7 +23,7 @@ repositories {
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
-    implementation "de.maxhenkel.voicechat:voicechat-api:2.5.27"
+    compileOnly("de.maxhenkel.voicechat:voicechat-api:2.5.27")
 }
 
 def targetJavaVersion = 21
