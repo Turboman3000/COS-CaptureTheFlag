@@ -19,7 +19,7 @@ public class ItemInteractEvent implements Listener {
     @EventHandler
     public void onEvent(PlayerInteractEvent e) {
         if (!(e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK)) return;
-
+        if (e.getItem() == null) return;
         if (!(e.getItem().getType() == Material.DIAMOND_SWORD
                 || e.getItem().getType() == Material.STONE_SWORD
                 || e.getItem().getType() == Material.GOLDEN_SWORD
