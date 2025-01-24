@@ -272,6 +272,17 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
 
                             assert leader != null;
                             leader.getInventory().addItem(flagItem);
+
+                            for (var pl : t.players()) {
+                                if (pl == leaderID) continue;
+
+                                var player = Bukkit.getPlayer(pl);
+
+                                assert player != null;
+                                player.sendMessage(mm.deserialize(prefix + "<gold>" + leader.getName() + "<green> is the leader of the Team <" + t.color() + ">" + t.name() + "<green>!"));
+                            }
+
+                            leader.sendMessage(mm.deserialize(prefix + "<green>You are the leader of the Team <" + t.color() + ">" + t.name() + "<green>!"));
                         }
                     }, 0, 20);
                 }
