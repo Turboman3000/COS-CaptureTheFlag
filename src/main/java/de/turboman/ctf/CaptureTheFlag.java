@@ -21,6 +21,9 @@ public final class CaptureTheFlag extends JavaPlugin {
     public static final String prefix = "<dark_aqua>Capture the Flag <gold>⇒<reset> ";
     public static Plugin plugin;
 
+    public static long PREP_TIME = 60;
+    public static long FIGHT_TIME = 60;
+
     private MiniMessage mm = MiniMessage.miniMessage();
 
     @Override

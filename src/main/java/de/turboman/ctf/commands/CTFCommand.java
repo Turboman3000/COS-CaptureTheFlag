@@ -300,6 +300,25 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
                 case "stop" -> {
 
                 }
+                case "config" -> {
+                    try {
+                        Integer.parseInt(args[2]);
+                    } catch (NumberFormatException e) {
+                        sender.sendMessage(mm.deserialize(prefix + "<dark_red>" + args[2].toUpperCase() + " <red>is not a number!"));
+                        return true;
+                    }
+
+                    switch (args[1]) {
+                        case "PREP_TIME" -> {
+                            PREP_TIME = Integer.parseInt(args[2]);
+                        }
+                        case "FIGHT_TIME" -> {
+                            FIGHT_TIME = Integer.parseInt(args[2]);
+                        }
+                    }
+
+                    sender.sendMessage(mm.deserialize(prefix + "<green>Changed <gold>" + args[1].toUpperCase() + "<green> to <gold>" + args[2].toUpperCase()));
+                }
             }
         }
 
@@ -350,6 +369,7 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
             output.add("team");
             output.add("start");
             output.add("stop");
+            output.add("config");
         } else if (args.length == 2 && args[0].equalsIgnoreCase("team")) {
             output.add("create");
             output.add("delete");
@@ -357,6 +377,9 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
             output.add("remove");
             output.add("leader");
             output.add("list");
+        } else if (args.length == 2 && args[0].equalsIgnoreCase("config")) {
+            output.add("PREP_TIME");
+            output.add("FIGHT_TIME");
         } else if (args.length == 4 && args[0].equalsIgnoreCase("team") && args[1].equalsIgnoreCase("create")) {
             output.add("black");
             output.add("dark_blue");
