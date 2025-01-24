@@ -1,6 +1,7 @@
 package de.turboman.ctf.events;
 
 import de.turboman.ctf.CaptureTheFlag;
+import de.turboman.ctf.maps.MapManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -10,6 +11,8 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ShieldMeta;
+
+import java.util.concurrent.TimeUnit;
 
 public class ItemInteractEvent implements Listener {
 
@@ -33,10 +36,11 @@ public class ItemInteractEvent implements Listener {
         shieldItem.setItemMeta(itemMeta);
         player.getInventory().setItemInOffHand(shieldItem);
 
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(CaptureTheFlag.plugin, () -> {
+        Bukkit.getAsyncScheduler().runAtFixedRate(CaptureTheFlag.plugin, (task) -> {
             if (!player.isBlocking()) {
-                player.getInventory().setItemInOffHand(null);
+                player.getInventory().setItemInOffHand(MapManager.getMapItem(player.getUniqueId()));
+                task.cancel();
             }
-        }, 0, 1);
+        }, 500, 150, TimeUnit.MILLISECONDS);
     }
 }
