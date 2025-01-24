@@ -12,3 +12,4 @@ commands:
   ctf:
       permission: ctf.command
       description: The Operator command to control the Game
+      usage: /ctf <start|stop|team|config>
