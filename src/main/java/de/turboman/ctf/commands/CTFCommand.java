@@ -54,7 +54,7 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
                             .setPassword(UUID.randomUUID().toString())
                             .build();
 
-                    teamList.put(teamID, new CTFTeam(teamID, args[2], args[3], new ArrayList<>(), group));
+                    teamList.put(teamID, new CTFTeam(teamID, args[2], args[3], new ArrayList<>(), group, null));
                     sender.sendMessage(mm.deserialize(prefix + "<green>Team <gold>" + args[2] + "<green> created!"));
                 }
                 case "delete" -> {
