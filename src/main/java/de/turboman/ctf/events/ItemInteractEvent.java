@@ -20,20 +20,23 @@ public class ItemInteractEvent implements Listener {
     public void onEvent(PlayerInteractEvent e) {
         if (!(e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK)) return;
         if (e.getItem() == null) return;
-        if (!(e.getItem().getType() == Material.DIAMOND_SWORD
-                || e.getItem().getType() == Material.STONE_SWORD
-                || e.getItem().getType() == Material.GOLDEN_SWORD
-                || e.getItem().getType() == Material.WOODEN_SWORD
-                || e.getItem().getType() == Material.IRON_SWORD
-                || e.getItem().getType() == Material.NETHERITE_SWORD
-                || e.getItem().getType() == Material.MACE)) return;
-
-        if (!(e.getItem().getType() == Material.DIAMOND_AXE
-                || e.getItem().getType() == Material.STONE_AXE
-                || e.getItem().getType() == Material.GOLDEN_AXE
-                || e.getItem().getType() == Material.WOODEN_AXE
-                || e.getItem().getType() == Material.IRON_AXE
-                || e.getItem().getType() == Material.NETHERITE_AXE)) return;
+        if (!(
+                // SWORDS
+                e.getItem().getType() == Material.DIAMOND_SWORD
+                        || e.getItem().getType() == Material.STONE_SWORD
+                        || e.getItem().getType() == Material.GOLDEN_SWORD
+                        || e.getItem().getType() == Material.WOODEN_SWORD
+                        || e.getItem().getType() == Material.IRON_SWORD
+                        || e.getItem().getType() == Material.NETHERITE_SWORD
+                        // MACE
+                        || e.getItem().getType() == Material.MACE
+                        // AXES
+                        || e.getItem().getType() == Material.DIAMOND_AXE
+                        || e.getItem().getType() == Material.STONE_AXE
+                        || e.getItem().getType() == Material.GOLDEN_AXE
+                        || e.getItem().getType() == Material.WOODEN_AXE
+                        || e.getItem().getType() == Material.IRON_AXE
+                        || e.getItem().getType() == Material.NETHERITE_AXE)) return;
 
         Player player = e.getPlayer();
 
