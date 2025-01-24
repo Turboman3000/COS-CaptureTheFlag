@@ -43,17 +43,26 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
                 case "create" -> {
                     if (args.length != 4) break;
 
-                    var group = voicechatAPI.groupBuilder().setHidden(true).setId(UUID.randomUUID()).setName(args[2]).setType(Group.Type.OPEN).setPersistent(true).setPassword(UUID.randomUUID().toString().replace("-", "")).build();
+                    var teamID = UUID.randomUUID();
+                    var group = voicechatAPI
+                            .groupBuilder()
+                            .setHidden(true)
+                            .setId(teamID)
+                            .setName(args[2])
+                            .setType(Group.Type.OPEN)
+                            .setPersistent(true)
+                            .setPassword(UUID.randomUUID().toString())
+                            .build();
 
-                    teamList.add(new CTFTeam(args[2], args[3], new ArrayList<>(), group));
+                    teamList.put(teamID, new CTFTeam(teamID, args[2], args[3], new ArrayList<>(), group));
                     sender.sendMessage(mm.deserialize(prefix + "<green>Team <gold>" + args[2] + "<green> created!"));
                 }
                 case "delete" -> {
                     if (args.length != 3) break;
 
-                    for (var t : teamList) {
+                    for (var t : teamList.values()) {
                         if (t.name().equals(args[2])) {
-                            teamList.remove(t);
+                            teamList.remove(t.id());
                             break;
                         }
                     }
@@ -63,7 +72,7 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
 
                     var player = Bukkit.getPlayer(args[3]);
 
-                    for (var t : teamList) {
+                    for (var t : teamList.values()) {
                         assert player != null;
                         if (t.players().contains(player.getUniqueId())) {
                             sender.sendMessage(mm.deserialize(prefix + "<dark_red>" + player.getName() + "<red> is already in a team!"));
@@ -73,7 +82,7 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
 
                     boolean noTeam = true;
 
-                    for (var t : teamList) {
+                    for (var t : teamList.values()) {
                         if (t.name().equals(args[2])) {
                             noTeam = false;
                             t.players().add(player.getUniqueId());
@@ -105,7 +114,7 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
                     var player = Bukkit.getPlayer(args[3]);
                     boolean noPlayerInTeam = true;
 
-                    for (var t : teamList) {
+                    for (var t : teamList.values()) {
                         assert player != null;
                         if (t.players().contains(player.getUniqueId())) {
                             noPlayerInTeam = false;
@@ -119,7 +128,7 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
 
                     boolean noTeam = true;
 
-                    for (var t : teamList) {
+                    for (var t : teamList.values()) {
                         if (t.name().equals(args[2])) {
                             noTeam = false;
                             t.players().remove(player.getUniqueId());
@@ -143,7 +152,7 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
                 case "leader" -> {
                     if (args.length != 3) break;
 
-                    for (var t : teamList) {
+                    for (var t : teamList.values()) {
                         if (t.name().equals(args[2])) {
                             if (t.leader() == null) {
                                 sender.sendMessage(mm.deserialize(prefix + "<red>Team <dark_red>" + t.name() + "<red> doesn't have a leader!"));
@@ -160,7 +169,7 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
                 case "list" -> {
                     sender.sendMessage(mm.deserialize(prefix + "<green>List of Teams:"));
 
-                    for (var t : teamList) {
+                    for (var t : teamList.values()) {
                         sender.sendMessage(mm.deserialize(prefix + "<" + t.color() + ">" + t.name() + "<gray> (" + t.players().size() + ")"));
                     }
                 }
@@ -204,14 +213,16 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
                             var loc1 = new Location(world, x1, world.getHighestBlockYAt(x1, z1), z1);
                             var loc2 = new Location(world, x2, world.getHighestBlockYAt(x2, z2), z2);
 
-                            for (var player : teamList.getFirst().players()) {
+                            ArrayList<CTFTeam> teamArray = new ArrayList<>(teamList.values());
+
+                            for (var player : teamArray.getFirst().players()) {
                                 var p = Bukkit.getPlayer(player);
 
                                 assert p != null;
                                 p.teleport(loc1);
                             }
 
-                            for (var player : teamList.get(1).players()) {
+                            for (var player : teamArray.get(1).players()) {
                                 var p = Bukkit.getPlayer(player);
 
                                 assert p != null;
@@ -247,7 +258,7 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
                             }
                         }
 
-                        for (var t : teamList) {
+                        for (var t : teamList.values()) {
                             for (var pid : t.players()) {
                                 var player = Bukkit.getPlayer(pid);
 
@@ -360,7 +371,7 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
             output.add("yellow");
             output.add("white");
         } else if (args.length == 3 && args[0].equalsIgnoreCase("team") && (args[1].equalsIgnoreCase("add") || args[1].equalsIgnoreCase("remove") || args[1].equalsIgnoreCase("giveflag"))) {
-            for (var t : teamList) {
+            for (var t : teamList.values()) {
                 output.add(t.name());
             }
         } else if (args.length == 4 && args[0].equalsIgnoreCase("team") && (args[1].equalsIgnoreCase("add") || args[1].equalsIgnoreCase("remove"))) {
@@ -368,7 +379,7 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
                 output.add(p.getName());
             }
         } else if (args.length == 3 && args[0].equalsIgnoreCase("team") && args[1].equalsIgnoreCase("leader")) {
-            for (var t : teamList) {
+            for (var t : teamList.values()) {
                 output.add(t.name());
             }
         }

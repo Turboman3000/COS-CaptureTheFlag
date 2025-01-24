@@ -11,11 +11,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Objects;
+import java.util.UUID;
 
 public final class CaptureTheFlag extends JavaPlugin {
-    public static ArrayList<CTFTeam> teamList = new ArrayList<>();
+    public static HashMap<UUID, CTFTeam> teamList = new HashMap<>();
     public static VoicechatServerApi voicechatAPI;
     public static final String prefix = "<dark_aqua>Capture the Flag <gold>⇒<reset> ";
     public static Plugin plugin;

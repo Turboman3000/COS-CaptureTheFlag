@@ -5,7 +5,7 @@ import de.maxhenkel.voicechat.api.Group;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public record CTFTeam(String name, String color, ArrayList<UUID> players, Group voiceGroup) {
+public record CTFTeam(UUID id, String name, String color, ArrayList<UUID> players, Group voiceGroup) {
     private static UUID leader = UUID.randomUUID();
 
     public UUID leader() {
