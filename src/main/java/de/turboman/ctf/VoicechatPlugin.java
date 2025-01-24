@@ -27,8 +27,9 @@ public class VoicechatPlugin implements de.maxhenkel.voicechat.api.VoicechatPlug
 
     private void onGroupCreate(CreateGroupEvent event) {
         if (event.getConnection() == null) return;
-
         Player player = (Player) event.getConnection().getPlayer().getPlayer();
+
+        if(player.isOp()) return;
 
         player.sendMessage(mm.deserialize(CaptureTheFlag.prefix + "<red>You cannot create a group!"));
         event.cancel();
