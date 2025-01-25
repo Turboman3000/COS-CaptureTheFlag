@@ -25,6 +25,8 @@ public final class CaptureTheFlag extends JavaPlugin {
     public static long PREP_TIME = 60;
     public static long FIGHT_TIME = 60;
 
+    public static GameState GAME_STATE = GameState.NO_GAME;
+
     private MiniMessage mm = MiniMessage.miniMessage();
 
     @Override
