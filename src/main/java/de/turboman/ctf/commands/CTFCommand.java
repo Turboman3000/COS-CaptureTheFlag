@@ -4,6 +4,7 @@ import de.maxhenkel.voicechat.api.Group;
 import de.maxhenkel.voicechat.api.VoicechatConnection;
 import de.turboman.ctf.CTFTeam;
 import de.turboman.ctf.GameState;
+import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -55,7 +56,9 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
                             .setPassword(UUID.randomUUID().toString())
                             .build();
 
-                    teamList.put(teamID, new CTFTeam(teamID, args[2], args[3], new ArrayList<>(), group, null));
+                    var bossBar = BossBar.bossBar(mm.deserialize("<" + args[3] + ">Team " + args[2]), 1, BossBar.Color.WHITE, BossBar.Overlay.PROGRESS);
+
+                    teamList.put(teamID, new CTFTeam(teamID, args[2], args[3], new ArrayList<>(), group, null, bossBar));
                     sender.sendMessage(mm.deserialize(prefix + "<green>Team <gold>" + args[2] + "<green> created!"));
                 }
                 case "delete" -> {
@@ -98,6 +101,8 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
 
                             assert connection != null;
                             connection.setGroup(t.voiceGroup());
+
+                            player.showBossBar(t.bossBar());
 
                             sender.sendMessage(mm.deserialize(prefix + "<green>Added player <gold>" + player.getName() + "<green> to the Team: <gold>" + t.name()));
                             player.sendMessage(mm.deserialize(prefix + "<green>You are now in Team: <gold>" + t.name()));
