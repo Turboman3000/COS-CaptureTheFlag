@@ -185,6 +185,12 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
                 case "start" -> {
                     AtomicInteger sec = new AtomicInteger(4);
 
+                    for (var t : teamList.values()) {
+                        t.bossBar().progress(0);
+                        t.bossBar().name(mm.deserialize("<green>Starting in <gold> 00:03"));
+                        t.bossBar().color(BossBar.Color.GREEN);
+                    }
+
                     Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
                         sec.getAndDecrement();
 
@@ -198,6 +204,11 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
                             pl.sendTitlePart(TitlePart.TIMES, Title.Times.times(Duration.ZERO, Duration.ofMillis(1500), Duration.ofMillis(2500)));
                             pl.sendTitlePart(TitlePart.TITLE, mm.deserialize("<green>" + sec));
                             pl.sendTitlePart(TitlePart.SUBTITLE, mm.deserialize("<gold>Starting in"));
+                        }
+
+                        for (var t : teamList.values()) {
+                            t.bossBar().progress(t.bossBar().progress() + 0.25f);
+                            t.bossBar().name(mm.deserialize("<green>Starting in <gold>00:0" + sec.get()));
                         }
 
                         if (sec.get() != 0) return;
