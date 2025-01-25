@@ -1,5 +1,6 @@
 package de.turboman.ctf.events;
 
+import org.bukkit.Tag;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.ClickType;
@@ -14,6 +15,12 @@ public class InventoryClickEvent implements Listener {
 
         if (e.getClick() == ClickType.CREATIVE) {
             return;
+        }
+
+        if (e.getCurrentItem() != null) {
+            if (Tag.BANNERS.isTagged(e.getCurrentItem().getType())) {
+                e.setCancelled(true);
+            }
         }
 
         if (e.getSlot() == 40) {
