@@ -3,6 +3,7 @@ package de.turboman.ctf.commands;
 import de.maxhenkel.voicechat.api.Group;
 import de.maxhenkel.voicechat.api.VoicechatConnection;
 import de.turboman.ctf.CTFTeam;
+import de.turboman.ctf.GameState;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -195,6 +196,8 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
                         }
 
                         if (sec.get() != 0) return;
+
+                        GAME_STATE = GameState.SET_FLAG;
 
                         var random = new Random();
                         var world = Objects.requireNonNull(Bukkit.getWorld("world"));
