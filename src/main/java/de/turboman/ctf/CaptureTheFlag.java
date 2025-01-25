@@ -44,6 +44,7 @@ public final class CaptureTheFlag extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ItemInteractEvent(), this);
         getServer().getPluginManager().registerEvents(new PlayerMoveEvent(), this);
         getServer().getPluginManager().registerEvents(new PlayerSwitchOffhandEvent(), this);
+        getServer().getPluginManager().registerEvents(new PlayerDeathEvent(), this);
 
         Objects.requireNonNull(getCommand("ctf")).setExecutor(new CTFCommand());
 
