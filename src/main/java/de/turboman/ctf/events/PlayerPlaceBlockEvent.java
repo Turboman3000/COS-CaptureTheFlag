@@ -3,6 +3,8 @@ package de.turboman.ctf.events;
 import de.turboman.ctf.CaptureTheFlag;
 import de.turboman.ctf.GameState;
 import net.kyori.adventure.bossbar.BossBar;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -56,6 +58,7 @@ public class PlayerPlaceBlockEvent implements Listener {
 
                             for (var player : Bukkit.getOnlinePlayers()) {
                                 player.sendMessage(mm.deserialize(CaptureTheFlag.prefix + "<green>All flags are set! It's time to gather some Resources to protect your Team Flag!"));
+                                player.playSound(Sound.sound(Key.key("minecraft:entity.wither.spawn"), Sound.Source.MASTER, 0.15f, 2));
                             }
 
                             break;
