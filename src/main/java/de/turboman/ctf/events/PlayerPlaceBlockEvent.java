@@ -52,6 +52,9 @@ public class PlayerPlaceBlockEvent implements Listener {
                             player.sendMessage(mm.deserialize(CaptureTheFlag.prefix + "<green>Flag placed at <gold>" + loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ()));
                         }
 
+                        t.bossBar().name(mm.deserialize("<yellow>Your Team Flag has been Placed!"));
+                        t.bossBar().color(BossBar.Color.YELLOW);
+
                         if (teamSet == CaptureTheFlag.teamList.size()) {
                             CaptureTheFlag.GAME_STATE = GameState.PREP;
 
