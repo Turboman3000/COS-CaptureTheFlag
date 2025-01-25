@@ -1,6 +1,8 @@
 package de.turboman.ctf.events;
 
 import de.turboman.ctf.CaptureTheFlag;
+import de.turboman.ctf.GameState;
+import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -22,11 +24,18 @@ public class PlayerPlaceBlockEvent implements Listener {
             }
             case SET_FLAG -> {
                 if (Tag.BANNERS.isTagged(e.getBlock().getType())) {
+                    int teamSet = 0;
+
                     for (var t : CaptureTheFlag.teamList.values()) {
+                        if (t.flagLocation() != null) {
+                            teamSet++;
+                        }
+
                         if (t.leader() != e.getPlayer().getUniqueId()) continue;
 
                         var loc = e.getBlock().getLocation();
 
+                        teamSet++;
                         t.flagLocation(loc);
 
                         for (var pl : t.players()) {
@@ -34,6 +43,22 @@ public class PlayerPlaceBlockEvent implements Listener {
 
                             assert player != null;
                             player.sendMessage(mm.deserialize(CaptureTheFlag.prefix + "<green>Flag placed at <gold>" + loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ()));
+                        }
+
+                        if (teamSet == CaptureTheFlag.teamList.size()) {
+                            CaptureTheFlag.GAME_STATE = GameState.PREP;
+
+                            for (var t2 : CaptureTheFlag.teamList.values()) {
+                                t2.bossBar().name(mm.deserialize("<green>Preparation Time<gold> " + CaptureTheFlag.PREP_TIME + ":00"));
+                                t2.bossBar().color(BossBar.Color.GREEN);
+                                t2.bossBar().progress(1);
+                            }
+
+                            for (var player : Bukkit.getOnlinePlayers()) {
+                                player.sendMessage(mm.deserialize(CaptureTheFlag.prefix + "<green>All flags are set! It's time to gather some Resources to protect your Team Flag!"));
+                            }
+
+                            break;
                         }
                     }
                     return;

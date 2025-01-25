@@ -58,7 +58,7 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
 
                     var bossBar = BossBar.bossBar(mm.deserialize("<" + args[3] + ">Team " + args[2]), 1, BossBar.Color.WHITE, BossBar.Overlay.PROGRESS);
 
-                    teamList.put(teamID, new CTFTeam(teamID, args[2], args[3], new ArrayList<>(), group, null, bossBar));
+                    teamList.put(teamID, new CTFTeam(teamID, args[2], args[3], new ArrayList<>(), group, bossBar));
                     sender.sendMessage(mm.deserialize(prefix + "<green>Team <gold>" + args[2] + "<green> created!"));
                 }
                 case "delete" -> {
@@ -217,7 +217,7 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
 
                         for (var t : teamList.values()) {
                             t.bossBar().progress(1f);
-                            t.bossBar().name(mm.deserialize("<blue>Set your Flag!>"));
+                            t.bossBar().name(mm.deserialize("<aqua>Set your Flag!"));
                             t.bossBar().color(BossBar.Color.BLUE);
                         }
 
