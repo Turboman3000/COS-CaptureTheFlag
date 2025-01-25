@@ -196,7 +196,7 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
 
                         for (var pl : Bukkit.getOnlinePlayers()) {
                             if (sec.get() >= 1) {
-                                pl.playSound(Sound.sound(Key.key("minecraft:ui.button.click"), Sound.Source.MASTER, 100, sec.get() - 1));
+                                pl.playSound(Sound.sound(Key.key("minecraft:ui.button.click"), Sound.Source.MASTER, 100, 1));
                             } else {
                                 pl.playSound(Sound.sound(Key.key("minecraft:entity.player.levelup"), Sound.Source.MASTER, 100, 1));
                             }
