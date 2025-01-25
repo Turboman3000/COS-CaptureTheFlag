@@ -3,7 +3,6 @@ package de.turboman.ctf;
 import de.maxhenkel.voicechat.api.Group;
 import net.kyori.adventure.bossbar.BossBar;
 import org.bukkit.Location;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -15,16 +14,15 @@ public class CTFTeam {
     private final ArrayList<UUID> players;
     private final Group voiceGroup;
     private final BossBar bossBar;
-    private UUID leader;
-    private Location flagLocation;
+    private UUID leader = null;
+    private Location flagLocation = null;
 
-    public CTFTeam(UUID id, String name, String color, ArrayList<UUID> players, Group voiceGroup, UUID leader, BossBar bossBar) {
+    public CTFTeam(UUID id, String name, String color, ArrayList<UUID> players, Group voiceGroup, BossBar bossBar) {
         this.id = id;
         this.name = name;
         this.color = color;
         this.players = players;
         this.voiceGroup = voiceGroup;
-        this.leader = leader;
         this.bossBar = bossBar;
     }
 
