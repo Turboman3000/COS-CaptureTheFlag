@@ -49,6 +49,7 @@ public class PlayerPlaceBlockEvent implements Listener {
 
                             assert player != null;
                             player.getInventory().setItemInOffHand(MapManager.getMapItem(pl));
+                            player.playSound(Sound.sound(Key.key("minecraft:entity.experience_orb.pickup"), Sound.Source.MASTER, 100, 2));
                             player.sendMessage(mm.deserialize(CaptureTheFlag.prefix + "<green>Flag placed at <gold>" + loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ()));
                         }
 
