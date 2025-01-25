@@ -1,6 +1,7 @@
 package de.turboman.ctf;
 
 import de.maxhenkel.voicechat.api.Group;
+import org.bukkit.Location;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -12,6 +13,7 @@ public class CTFTeam {
     private final ArrayList<UUID> players;
     private final Group voiceGroup;
     private UUID leader;
+    private Location flagLocation;
 
     public CTFTeam(UUID id, String name, String color, ArrayList<UUID> players, Group voiceGroup, UUID leader) {
         this.id = id;
@@ -48,5 +50,13 @@ public class CTFTeam {
 
     public void leader(UUID leader) {
         this.leader = leader;
+    }
+
+    public Location flagLocation() {
+        return flagLocation;
+    }
+
+    public void flagLocation(Location flagLocation) {
+        this.flagLocation = flagLocation;
     }
 }
