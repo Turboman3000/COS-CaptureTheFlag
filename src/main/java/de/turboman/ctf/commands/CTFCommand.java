@@ -215,6 +215,12 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
 
                         GAME_STATE = GameState.SET_FLAG;
 
+                        for (var t : teamList.values()) {
+                            t.bossBar().progress(1f);
+                            t.bossBar().name(mm.deserialize("<blue>Set your Flag!>"));
+                            t.bossBar().color(BossBar.Color.BLUE);
+                        }
+
                         var random = new Random();
                         var world = Objects.requireNonNull(Bukkit.getWorld("world"));
 
