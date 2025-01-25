@@ -48,6 +48,7 @@ public class PlayerPlaceBlockEvent implements Listener {
                             MapManager.playerMaps.get(pl).decorations().put("own_flag", MapDecorations.decorationEntry(MapManager.getDecoColor(t), loc.getBlockX(), loc.getBlockZ(), 0));
 
                             assert player != null;
+                            player.getInventory().setItemInOffHand(MapManager.getMapItem(pl));
                             player.sendMessage(mm.deserialize(CaptureTheFlag.prefix + "<green>Flag placed at <gold>" + loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ()));
                         }
 
