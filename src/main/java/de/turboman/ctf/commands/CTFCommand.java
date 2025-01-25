@@ -368,24 +368,6 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
         };
     }
 
-    private static @Nullable MapCursor.Type getDecoColor(CTFTeam t) {
-        return switch (t.color()) {
-            case "black" -> MapCursor.Type.BANNER_BLACK;
-            case "dark_blue" -> MapCursor.Type.BANNER_BLUE;
-            case "dark_green" -> MapCursor.Type.BANNER_GREEN;
-            case "dark_aqua" -> MapCursor.Type.BANNER_CYAN;
-            case "dark_purple" -> MapCursor.Type.BANNER_PURPLE;
-            case "gray" -> MapCursor.Type.BANNER_LIGHT_GRAY;
-            case "dark_gray" -> MapCursor.Type.BANNER_GRAY;
-            case "green" -> MapCursor.Type.BANNER_LIME;
-            case "red" -> MapCursor.Type.BANNER_RED;
-            case "light_purple" -> MapCursor.Type.BANNER_MAGENTA;
-            case "yellow" -> MapCursor.Type.BANNER_YELLOW;
-            case "white" -> MapCursor.Type.BANNER_WHITE;
-            default -> null;
-        };
-    }
-
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String @NotNull [] args) {
         var output = new ArrayList<String>();
