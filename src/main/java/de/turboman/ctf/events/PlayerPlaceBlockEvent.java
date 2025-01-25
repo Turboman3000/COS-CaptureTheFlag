@@ -57,7 +57,7 @@ public class PlayerPlaceBlockEvent implements Listener {
                             }
 
                             for (var player : Bukkit.getOnlinePlayers()) {
-                                player.sendMessage(mm.deserialize(CaptureTheFlag.prefix + "<green>All flags are set! It's time to gather some Resources to protect your Team Flag!"));
+                                player.sendMessage(mm.deserialize(CaptureTheFlag.prefix + "<green>All flags are set! It's time to gather some Resources to protect your Team's Flag!"));
                                 player.playSound(Sound.sound(Key.key("minecraft:entity.wither.spawn"), Sound.Source.MASTER, 0.15f, 2));
                             }
 
