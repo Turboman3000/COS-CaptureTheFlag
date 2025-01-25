@@ -40,8 +40,8 @@ public class MapManager {
 
         meta.setMapView(data.view());
 
-        mapItem.setData(DataComponentTypes.MAP_DECORATIONS, MapDecorations.mapDecorations().putAll(data.decorations()).build());
         mapItem.setItemMeta(meta);
+        mapItem.setData(DataComponentTypes.MAP_DECORATIONS, MapDecorations.mapDecorations().putAll(data.decorations()).build());
 
         return mapItem;
     }

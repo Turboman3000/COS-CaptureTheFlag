@@ -15,6 +15,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 
+import java.util.UUID;
+
 public class PlayerPlaceBlockEvent implements Listener {
     private MiniMessage mm = MiniMessage.miniMessage();
 
@@ -45,7 +47,7 @@ public class PlayerPlaceBlockEvent implements Listener {
                         for (var pl : t.players()) {
                             var player = Bukkit.getPlayer(pl);
 
-                            MapManager.playerMaps.get(pl).decorations().put("own_flag", MapDecorations.decorationEntry(MapManager.getDecoColor(t), loc.getBlockX(), loc.getBlockZ(), 0));
+                            MapManager.playerMaps.get(pl).decorations().put(UUID.randomUUID() + "", MapDecorations.decorationEntry(MapManager.getDecoColor(t), loc.getBlockX(), loc.getBlockZ(), 0));
 
                             assert player != null;
                             player.getInventory().setItemInOffHand(MapManager.getMapItem(pl));
