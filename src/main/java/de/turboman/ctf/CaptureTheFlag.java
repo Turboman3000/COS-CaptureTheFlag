@@ -3,10 +3,7 @@ package de.turboman.ctf;
 import de.maxhenkel.voicechat.api.BukkitVoicechatService;
 import de.maxhenkel.voicechat.api.VoicechatServerApi;
 import de.turboman.ctf.commands.CTFCommand;
-import de.turboman.ctf.events.InventoryClickEvent;
-import de.turboman.ctf.events.ItemInteractEvent;
-import de.turboman.ctf.events.PlayerMoveEvent;
-import de.turboman.ctf.events.PlayerSwitchOffhandEvent;
+import de.turboman.ctf.events.*;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
@@ -41,6 +38,7 @@ public final class CaptureTheFlag extends JavaPlugin {
             Bukkit.getConsoleSender().sendMessage(mm.deserialize(prefix + "<red>VoiceChat plugin not found"));
         }
 
+        getServer().getPluginManager().registerEvents(new PlayerBreakBlockEvent(), this);
         getServer().getPluginManager().registerEvents(new InventoryClickEvent(), this);
         getServer().getPluginManager().registerEvents(new ItemInteractEvent(), this);
         getServer().getPluginManager().registerEvents(new PlayerMoveEvent(), this);
