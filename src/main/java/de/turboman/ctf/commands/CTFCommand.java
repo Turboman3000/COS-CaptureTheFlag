@@ -18,7 +18,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.map.MapCursor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -212,6 +211,10 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
                         }
 
                         if (sec.get() != 0) return;
+
+                        for (var pl : Bukkit.getOnlinePlayers()) {
+                            pl.getInventory().clear();
+                        }
 
                         GAME_STATE = GameState.SET_FLAG;
 
