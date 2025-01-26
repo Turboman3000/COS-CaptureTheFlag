@@ -350,6 +350,9 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
                         case "FIGHT_TIME" -> {
                             FIGHT_TIME = Integer.parseInt(args[2]);
                         }
+                        case "SEARCH_TIME" -> {
+                            SEARCH_TIME = Integer.parseInt(args[2]);
+                        }
                     }
 
                     sender.sendMessage(mm.deserialize(prefix + "<green>Changed <gold>" + args[1].toUpperCase() + "<green> to <gold>" + args[2].toUpperCase()));
@@ -397,6 +400,7 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
         } else if (args.length == 2 && args[0].equalsIgnoreCase("config")) {
             output.add("PREP_TIME");
             output.add("FIGHT_TIME");
+            output.add("SEARCH_TIME");
         } else if (args.length == 4 && args[0].equalsIgnoreCase("team") && args[1].equalsIgnoreCase("create")) {
             output.add("black");
             output.add("dark_blue");
