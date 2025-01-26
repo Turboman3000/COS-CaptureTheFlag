@@ -34,7 +34,7 @@ public class MapManager {
     }
 
     public static ItemStack getMapItem(UUID uuid) {
-        if (Bukkit.getPlayer(uuid).getInventory().getItemInOffHand().getType() != Material.FILLED_MAP) {
+        if (Bukkit.getPlayer(uuid).getInventory().getItemInOffHand().getType() == Material.SHIELD) {
             return Bukkit.getPlayer(uuid).getInventory().getItemInOffHand();
         }
 
