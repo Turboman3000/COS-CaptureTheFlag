@@ -5,6 +5,8 @@ import de.maxhenkel.voicechat.api.VoicechatServerApi;
 import de.turboman.ctf.commands.CTFCommand;
 import de.turboman.ctf.events.*;
 import net.kyori.adventure.bossbar.BossBar;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
@@ -29,6 +31,7 @@ public final class CaptureTheFlag extends JavaPlugin {
     public static long TIMER_MINUTES = 0;
     public static long TIMER_SECONDS = 0;
     public static long TIMER_TOTAL_SECONDS = 0;
+    public static long TIMER_SEARCH = 0;
 
     public static GameState GAME_STATE = GameState.NO_GAME;
 
@@ -63,6 +66,7 @@ public final class CaptureTheFlag extends JavaPlugin {
         TIMER_HOURS = PREP_TIME / 60;
         TIMER_MINUTES = PREP_TIME - (TIMER_HOURS * 60);
         TIMER_TOTAL_SECONDS = getTimerSecs();
+        TIMER_SEARCH = SEARCH_TIME * 60;
 
         Bukkit.getAsyncScheduler().runAtFixedRate(plugin, (task) -> {
             if (TIMER_SECONDS == 0
@@ -76,6 +80,23 @@ public final class CaptureTheFlag extends JavaPlugin {
                 GAME_STATE = GameState.FIGHT;
             }
 
+            if (TIMER_SEARCH <= 5 && TIMER_SEARCH != 0) {
+                for (var p : Bukkit.getOnlinePlayers()) {
+                    p.playSound(Sound.sound(Key.key("minecraft:block.note_block.pling"), Sound.Source.MASTER, 1, 2));
+                    p.sendMessage(mm.deserialize(prefix + "<green>Positions of all Players will be shown on the Map in <gold>" + TIMER_SEARCH + "<green> seconds!"));
+                }
+            }
+
+            if (TIMER_SEARCH == 0) {
+                TIMER_SEARCH = SEARCH_TIME * 60;
+
+                for (var p : Bukkit.getOnlinePlayers()) {
+                    p.playSound(Sound.sound(Key.key("minecraft:entity.player.levelup"), Sound.Source.MASTER, 1, 2));
+                    p.sendMessage(mm.deserialize(prefix + "<green>Positions of all Players are shown on the Map!"));
+                }
+            }
+
+            TIMER_SEARCH--;
             TIMER_SECONDS--;
 
             if (TIMER_SECONDS == -1) {
