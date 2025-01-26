@@ -32,11 +32,14 @@ public class PlayerPlaceBlockEvent implements Listener {
                 if (Tag.BANNERS.isTagged(e.getBlock().getType())) {
                     int teamSet = 0;
 
+                    // Race Condition
                     for (var t : CaptureTheFlag.teamList.values()) {
                         if (t.flagLocation() != null) {
                             teamSet++;
                         }
+                    }
 
+                    for (var t : CaptureTheFlag.teamList.values()) {
                         if (t.leader() != e.getPlayer().getUniqueId()) continue;
 
                         var loc = e.getBlock().getLocation();
@@ -60,12 +63,7 @@ public class PlayerPlaceBlockEvent implements Listener {
 
                         if (teamSet == CaptureTheFlag.teamList.size()) {
                             CaptureTheFlag.GAME_STATE = GameState.PREP;
-
-                            for (var t2 : CaptureTheFlag.teamList.values()) {
-                                t2.bossBar().name(mm.deserialize("<green>Preparation Time<gold> " + CaptureTheFlag.PREP_TIME + ":00"));
-                                t2.bossBar().color(BossBar.Color.GREEN);
-                                t2.bossBar().progress(1);
-                            }
+                            CaptureTheFlag.startTimer();
 
                             for (var player : Bukkit.getOnlinePlayers()) {
                                 player.sendMessage(mm.deserialize(CaptureTheFlag.prefix + "<green>All flags are set! It's time to gather some Resources to protect your Team's Flag!"));

@@ -4,6 +4,7 @@ import de.maxhenkel.voicechat.api.BukkitVoicechatService;
 import de.maxhenkel.voicechat.api.VoicechatServerApi;
 import de.turboman.ctf.commands.CTFCommand;
 import de.turboman.ctf.events.*;
+import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
@@ -12,6 +13,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 public final class CaptureTheFlag extends JavaPlugin {
     public static HashMap<UUID, CTFTeam> teamList = new HashMap<>();
@@ -22,9 +24,14 @@ public final class CaptureTheFlag extends JavaPlugin {
     public static long PREP_TIME = 60;
     public static long FIGHT_TIME = 60;
 
+    public static long TIMER_HOURS = 0;
+    public static long TIMER_MINUTES = 0;
+    public static long TIMER_SECONDS = 0;
+    public static long TIMER_TOTAL_SECONDS = 0;
+
     public static GameState GAME_STATE = GameState.NO_GAME;
 
-    private MiniMessage mm = MiniMessage.miniMessage();
+    private static MiniMessage mm = MiniMessage.miniMessage();
 
     @Override
     public void onEnable() {
@@ -49,5 +56,59 @@ public final class CaptureTheFlag extends JavaPlugin {
         Objects.requireNonNull(getCommand("ctf")).setExecutor(new CTFCommand());
 
         Bukkit.getConsoleSender().sendMessage(mm.deserialize(prefix + "<green>Plugin enabled"));
+    }
+
+    public static void startTimer() {
+        TIMER_HOURS = PREP_TIME / 60;
+        TIMER_MINUTES = PREP_TIME - (TIMER_HOURS * 60);
+        TIMER_TOTAL_SECONDS = getTimerSecs();
+
+        Bukkit.getAsyncScheduler().runAtFixedRate(plugin, (task) -> {
+            if (TIMER_SECONDS == 0
+                    && TIMER_MINUTES == 0
+                    && TIMER_HOURS == 0
+                    && GAME_STATE == GameState.PREP) {
+                TIMER_HOURS = FIGHT_TIME / 60;
+                TIMER_MINUTES = FIGHT_TIME - (TIMER_HOURS * 60);
+                TIMER_TOTAL_SECONDS = getTimerSecs();
+
+                GAME_STATE = GameState.FIGHT;
+            }
+
+            TIMER_SECONDS--;
+
+            if (TIMER_SECONDS == -1) {
+                TIMER_SECONDS = 59;
+                TIMER_MINUTES--;
+            }
+            if (TIMER_MINUTES == -1) {
+                TIMER_SECONDS = 59;
+                TIMER_MINUTES = 59;
+                TIMER_HOURS--;
+            }
+
+            var progress = (float) getTimerSecs() / TIMER_TOTAL_SECONDS;
+            var timeText = String.format("%02d", TIMER_HOURS) + ":" + String.format("%02d", TIMER_MINUTES) + ":" + String.format("%02d", TIMER_SECONDS);
+
+            if (GAME_STATE == GameState.PREP) {
+                for (var t2 : teamList.values()) {
+                    t2.bossBar().name(mm.deserialize("<green>Preparation Time<gold> " + timeText));
+                    t2.bossBar().color(BossBar.Color.GREEN);
+                    t2.bossBar().progress(progress);
+                }
+            }
+
+            if (GAME_STATE == GameState.FIGHT) {
+                for (var t2 : teamList.values()) {
+                    t2.bossBar().name(mm.deserialize("<green>Battle Time<gold> " + timeText));
+                    t2.bossBar().color(BossBar.Color.GREEN);
+                    t2.bossBar().progress(progress);
+                }
+            }
+        }, 0, 1, TimeUnit.SECONDS);
+    }
+
+    private static long getTimerSecs() {
+        return (TIMER_HOURS * 60 * 60) + (TIMER_MINUTES * 60) + TIMER_SECONDS;
     }
 }
