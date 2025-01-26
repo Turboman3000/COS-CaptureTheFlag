@@ -34,6 +34,10 @@ public class MapManager {
     }
 
     public static ItemStack getMapItem(UUID uuid) {
+        if (Bukkit.getPlayer(uuid).getInventory().getItemInOffHand().getType() != Material.FILLED_MAP) {
+            return Bukkit.getPlayer(uuid).getInventory().getItemInOffHand();
+        }
+
         MapData data = playerMaps.get(uuid);
         ItemStack mapItem = new ItemStack(Material.FILLED_MAP);
         MapMeta meta = (MapMeta) mapItem.getItemMeta();
