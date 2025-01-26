@@ -44,6 +44,13 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
                 case "create" -> {
                     if (args.length != 4) break;
 
+                    for (var t : teamList.values()) {
+                        if (t.color().equalsIgnoreCase(args[3])) {
+                            sender.sendMessage(mm.deserialize(prefix + "<red>The Team " + t.name() + " already have this color!"));
+                            return true;
+                        }
+                    }
+
                     var teamID = UUID.randomUUID();
                     var group = voicechatAPI
                             .groupBuilder()
