@@ -238,8 +238,8 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
                             var x2 = border.getCenter().getBlockX() - random.nextInt((int) (border.getSize() / 2));
                             var z2 = border.getCenter().getBlockZ() - random.nextInt((int) (border.getSize() / 2));
 
-                            var loc1 = new Location(world, x1, world.getHighestBlockYAt(x1, z1), z1);
-                            var loc2 = new Location(world, x2, world.getHighestBlockYAt(x2, z2), z2);
+                            var loc1 = new Location(world, x1, world.getHighestBlockYAt(x1, z1) + 1, z1);
+                            var loc2 = new Location(world, x2, world.getHighestBlockYAt(x2, z2) + 1, z2);
 
                             ArrayList<CTFTeam> teamArray = new ArrayList<>(teamList.values());
 
@@ -262,7 +262,7 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
                             var x = border.getCenter().getBlockX() + random.nextInt((int) (border.getSize() / 2));
                             var z = border.getCenter().getBlockZ() - random.nextInt((int) (border.getSize() / 2));
 
-                            var loc1 = new Location(world, x, world.getHighestBlockYAt(x, z), z);
+                            var loc1 = new Location(world, x, world.getHighestBlockYAt(x, z) + 1, z);
 
                             for (var player : teamList.get(2).players()) {
                                 var p = Bukkit.getPlayer(player);
@@ -276,7 +276,7 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
                             var x = border.getCenter().getBlockX() - random.nextInt((int) (border.getSize() / 2));
                             var z = border.getCenter().getBlockZ() + random.nextInt((int) (border.getSize() / 2));
 
-                            var loc1 = new Location(world, x, world.getHighestBlockYAt(x, z), z);
+                            var loc1 = new Location(world, x, world.getHighestBlockYAt(x, z) + 1, z);
 
                             for (var player : teamList.get(3).players()) {
                                 var p = Bukkit.getPlayer(player);
