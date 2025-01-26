@@ -337,7 +337,7 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
                 }
                 case "config" -> {
                     try {
-                        Integer.parseInt(args[2]);
+                        Long.parseLong(args[2]);
                     } catch (NumberFormatException e) {
                         sender.sendMessage(mm.deserialize(prefix + "<dark_red>" + args[2].toUpperCase() + " <red>is not a number!"));
                         return true;
@@ -345,13 +345,13 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
 
                     switch (args[1]) {
                         case "PREP_TIME" -> {
-                            PREP_TIME = Integer.parseInt(args[2]);
+                            PREP_TIME = Long.parseLong(args[2]);
                         }
                         case "FIGHT_TIME" -> {
-                            FIGHT_TIME = Integer.parseInt(args[2]);
+                            FIGHT_TIME = Long.parseLong(args[2]);
                         }
                         case "SEARCH_TIME" -> {
-                            SEARCH_TIME = Integer.parseInt(args[2]);
+                            SEARCH_TIME = Long.parseLong(args[2]);
                         }
                     }
 
