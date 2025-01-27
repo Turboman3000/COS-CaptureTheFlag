@@ -44,10 +44,9 @@ public class MapManager {
 
         MapData data = playerMaps.get(uuid);
         ItemStack mapItem = new ItemStack(Material.FILLED_MAP);
+        mapItem.setData(DataComponentTypes.MAP_DECORATIONS, MapDecorations.mapDecorations(data.decorations()));
+
         MapMeta meta = (MapMeta) mapItem.getItemMeta();
-
-        mapItem.setData(DataComponentTypes.MAP_DECORATIONS, MapDecorations.mapDecorations().putAll(data.decorations()).build());
-
         meta.setMapView(data.view());
         mapItem.setItemMeta(meta);
 
