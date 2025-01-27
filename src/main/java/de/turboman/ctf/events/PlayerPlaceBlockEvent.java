@@ -27,7 +27,7 @@ public class PlayerPlaceBlockEvent implements Listener {
 
         if (p.getGameMode() == GameMode.CREATIVE) return;
 
-        if (!CaptureTheFlag.deadPlayers.contains(p.getUniqueId())) {
+        if (CaptureTheFlag.deadPlayers.contains(p.getUniqueId())) {
             e.setCancelled(true);
             return;
         }

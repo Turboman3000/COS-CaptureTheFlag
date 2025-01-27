@@ -14,7 +14,7 @@ public class PlayerBreakBlockEvent implements Listener {
         Player p = e.getPlayer();
 
         if (p.getGameMode() == GameMode.CREATIVE) return;
-        if (!CaptureTheFlag.deadPlayers.contains(p.getUniqueId())) {
+        if (CaptureTheFlag.deadPlayers.contains(p.getUniqueId())) {
             e.setCancelled(true);
             return;
         }
