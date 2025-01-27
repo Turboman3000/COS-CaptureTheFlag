@@ -50,7 +50,7 @@ public class ItemInteractEvent implements Listener {
 
         Bukkit.getAsyncScheduler().runAtFixedRate(CaptureTheFlag.plugin, (task) -> {
             if (!player.isBlocking()) {
-                player.getInventory().setItemInOffHand(MapManager.getMapItem(player.getUniqueId()));
+                player.getInventory().setItemInOffHand(MapManager.getMapItem(player.getUniqueId(), true));
                 task.cancel();
             }
         }, 500, 150, TimeUnit.MILLISECONDS);

@@ -34,7 +34,11 @@ public class MapManager {
     }
 
     public static ItemStack getMapItem(UUID uuid) {
-        if (Bukkit.getPlayer(uuid).getInventory().getItemInOffHand().getType() == Material.SHIELD) {
+        return getMapItem(uuid, false);
+    }
+
+    public static ItemStack getMapItem(UUID uuid, boolean force) {
+        if (Bukkit.getPlayer(uuid).getInventory().getItemInOffHand().getType() == Material.SHIELD && !force) {
             return Bukkit.getPlayer(uuid).getInventory().getItemInOffHand();
         }
 
