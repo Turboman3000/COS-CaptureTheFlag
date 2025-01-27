@@ -96,7 +96,6 @@ public final class CaptureTheFlag extends JavaPlugin {
             if (TIMER_SEARCH == 0) {
                 TIMER_SEARCH = SEARCH_TIME * 60;
 
-
                 for (var p : Bukkit.getOnlinePlayers()) {
                     for (var pp : Bukkit.getOnlinePlayers()) {
                         if (pp.getUniqueId() == p.getUniqueId()) continue;
@@ -113,11 +112,13 @@ public final class CaptureTheFlag extends JavaPlugin {
                             }
                         }
 
-                        if (isTeam) {
-                            MapManager.playerMaps.get(p.getUniqueId()).decorations().put("player_" + pp.getUniqueId(), MapDecorations.decorationEntry(MapCursor.Type.BLUE_MARKER, pp.getLocation().getBlockX(), pp.getLocation().getBlockZ(), 0));
-                        } else {
-                            MapManager.playerMaps.get(p.getUniqueId()).decorations().put("player_" + pp.getUniqueId(), MapDecorations.decorationEntry(MapCursor.Type.RED_MARKER, pp.getLocation().getBlockX(), pp.getLocation().getBlockZ(), 0));
-                        }
+                        MapManager.playerMaps.get(p.getUniqueId()).decorations()
+                                .put("player_" + pp.getUniqueId(),
+                                        MapDecorations.decorationEntry(
+                                                isTeam ? MapCursor.Type.BLUE_MARKER : MapCursor.Type.RED_MARKER,
+                                                pp.getLocation().getBlockX(),
+                                                pp.getLocation().getBlockZ(),
+                                                pp.getLocation().getPitch()));
                     }
 
                     p.getInventory().setItemInOffHand(MapManager.getMapItem(p.getUniqueId()));
