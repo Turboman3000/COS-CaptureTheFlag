@@ -46,10 +46,10 @@ public class MapManager {
         ItemStack mapItem = new ItemStack(Material.FILLED_MAP);
         MapMeta meta = (MapMeta) mapItem.getItemMeta();
 
-        meta.setMapView(data.view());
-
-        mapItem.setItemMeta(meta);
         mapItem.setData(DataComponentTypes.MAP_DECORATIONS, MapDecorations.mapDecorations().putAll(data.decorations()).build());
+
+        meta.setMapView(data.view());
+        mapItem.setItemMeta(meta);
 
         return mapItem;
     }
