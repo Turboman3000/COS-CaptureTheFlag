@@ -11,6 +11,7 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Tag;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -22,7 +23,14 @@ public class PlayerPlaceBlockEvent implements Listener {
 
     @EventHandler
     public void onEvent(BlockPlaceEvent e) {
-        if (e.getPlayer().getGameMode() == GameMode.CREATIVE) return;
+        Player p = e.getPlayer();
+
+        if (p.getGameMode() == GameMode.CREATIVE) return;
+
+        if (!CaptureTheFlag.deadPlayers.contains(p.getUniqueId())) {
+            e.setCancelled(true);
+            return;
+        }
 
         switch (CaptureTheFlag.GAME_STATE) {
             case PREP, FIGHT -> {
@@ -40,7 +48,7 @@ public class PlayerPlaceBlockEvent implements Listener {
                     }
 
                     for (var t : CaptureTheFlag.teamList.values()) {
-                        if (t.leader() != e.getPlayer().getUniqueId()) continue;
+                        if (t.leader() != p.getUniqueId()) continue;
 
                         var loc = e.getBlock().getLocation();
 

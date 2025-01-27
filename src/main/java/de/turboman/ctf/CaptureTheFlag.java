@@ -15,12 +15,14 @@ import org.bukkit.map.MapCursor;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 public final class CaptureTheFlag extends JavaPlugin {
+    public static ArrayList<UUID> deadPlayers = new ArrayList<>();
     public static HashMap<UUID, CTFTeam> teamList = new HashMap<>();
     public static VoicechatServerApi voicechatAPI;
     public static final String prefix = "<dark_aqua>Capture the Flag <gold>⇒<reset> ";
@@ -52,6 +54,7 @@ public final class CaptureTheFlag extends JavaPlugin {
             Bukkit.getConsoleSender().sendMessage(mm.deserialize(prefix + "<red>VoiceChat plugin not found"));
         }
 
+        getServer().getPluginManager().registerEvents(new PlayerMoveEvent(), this);
         getServer().getPluginManager().registerEvents(new PlayerPlaceBlockEvent(), this);
         getServer().getPluginManager().registerEvents(new PlayerBreakBlockEvent(), this);
         getServer().getPluginManager().registerEvents(new InventoryClickEvent(), this);
