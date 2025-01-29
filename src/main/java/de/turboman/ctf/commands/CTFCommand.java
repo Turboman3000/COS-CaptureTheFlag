@@ -18,6 +18,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -222,6 +224,7 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
                         for (var pl : Bukkit.getOnlinePlayers()) {
                             pl.getInventory().clear();
                             pl.setScoreboard(scoreboard);
+                            pl.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, Integer.MAX_VALUE, 255, false, false));
                         }
 
                         GAME_STATE = GameState.SET_FLAG;
