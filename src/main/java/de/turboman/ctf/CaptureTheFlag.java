@@ -10,11 +10,14 @@ import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.title.Title;
+import net.kyori.adventure.title.TitlePart;
 import org.bukkit.Bukkit;
 import org.bukkit.map.MapCursor;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
@@ -75,15 +78,43 @@ public final class CaptureTheFlag extends JavaPlugin {
         TIMER_SEARCH = SEARCH_TIME * 60;
 
         Bukkit.getAsyncScheduler().runAtFixedRate(plugin, (task) -> {
-            if (TIMER_SECONDS == 0
-                    && TIMER_MINUTES == 0
+            if (TIMER_SECONDS <= 5
                     && TIMER_HOURS == 0
+                    && TIMER_MINUTES == 0
+                    && GAME_STATE == GameState.PREP) {
+                for (var p : Bukkit.getOnlinePlayers()) {
+                    p.sendMessage(mm.deserialize(prefix + "<green>Battle Time begins in <gold>" + TIMER_SECONDS));
+                    p.playSound(Sound.sound(Key.key("minecraft:block.note_block.pling"), Sound.Source.MASTER, 1, 2));
+                }
+            }
+
+            if (TIMER_SECONDS == 0
+                    && TIMER_HOURS == 0
+                    && TIMER_MINUTES == 0
                     && GAME_STATE == GameState.PREP) {
                 TIMER_HOURS = FIGHT_TIME / 60;
                 TIMER_MINUTES = FIGHT_TIME - (TIMER_HOURS * 60);
                 TIMER_TOTAL_SECONDS = getTimerSecs();
 
                 GAME_STATE = GameState.FIGHT;
+
+                for (var t : teamList.values()) {
+                    for (var pp : t.players()) {
+                        var p = Bukkit.getPlayer(pp);
+
+                        assert p != null;
+                        p.teleport(t.flagLocation());
+                    }
+                }
+
+                for (var p : Bukkit.getOnlinePlayers()) {
+                    p.sendTitlePart(TitlePart.TIMES, Title.Times.times(Duration.ZERO, Duration.ofMillis(2500), Duration.ofMillis(2500)));
+                    p.sendTitlePart(TitlePart.TITLE, mm.deserialize(""));
+                    p.sendTitlePart(TitlePart.SUBTITLE, mm.deserialize("<gold><b>It's Battle Time!"));
+
+                    p.sendMessage(mm.deserialize(prefix + "<green>It's Time to Fight! Use the resources that you've collected to fight for your Team and to protect your Team's flag!"));
+                    p.playSound(Sound.sound(Key.key("minecraft:entity.ender_dragon.growl"), Sound.Source.MASTER, 0.7f, 1));
+                }
             }
 
             if (TIMER_SEARCH <= 5 && TIMER_SEARCH != 0) {
