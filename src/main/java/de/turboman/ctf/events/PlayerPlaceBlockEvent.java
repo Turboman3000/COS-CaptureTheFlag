@@ -28,6 +28,16 @@ public class PlayerPlaceBlockEvent implements Listener {
 
         if (p.getGameMode() == GameMode.CREATIVE) return;
 
+        switch (e.getBlockPlaced().getType()) {
+            case Material.BLACK_WALL_BANNER, Material.BLUE_WALL_BANNER, Material.GREEN_WALL_BANNER,
+                 Material.CYAN_WALL_BANNER, Material.PURPLE_WALL_BANNER, Material.LIGHT_GRAY_WALL_BANNER,
+                 Material.GRAY_WALL_BANNER, Material.LIME_WALL_BANNER, Material.RED_WALL_BANNER,
+                 Material.MAGENTA_WALL_BANNER, Material.YELLOW_WALL_BANNER, Material.WHITE_WALL_BANNER -> {
+                e.setCancelled(true);
+                return;
+            }
+        }
+
         if (e.getBlockAgainst().getType() == Material.BEDROCK) {
             p.sendMessage(mm.deserialize(CaptureTheFlag.prefix + "<red>You can't place blocks here!"));
 
