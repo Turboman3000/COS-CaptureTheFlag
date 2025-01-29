@@ -1,6 +1,7 @@
 package de.turboman.ctf.events;
 
 import de.turboman.ctf.CaptureTheFlag;
+import de.turboman.ctf.GameState;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.EntityType;
@@ -15,6 +16,11 @@ public class EntityInteractionEvent implements Listener {
 
     @EventHandler
     public void onEvent(PlayerInteractAtEntityEvent e) {
+        if(CaptureTheFlag.GAME_STATE != GameState.FIGHT) {
+            e.getPlayer().sendMessage(mm.deserialize(CaptureTheFlag.prefix + "<red>You can steel flags only in the Battle Phase!"));
+            return;
+        }
+
         if (e.getRightClicked().getType() != EntityType.INTERACTION) return;
 
         for (var tag : e.getRightClicked().getScoreboardTags()) {
