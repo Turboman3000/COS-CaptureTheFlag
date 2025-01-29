@@ -11,7 +11,14 @@ public class CursorRenderer extends MapRenderer {
         MapCursorCollection cursors = new MapCursorCollection();
 
         for (var c : MapManager.playerMaps.get(player.getUniqueId()).cursors().values()) {
-            cursors.addCursor(new MapCursor((byte) c.x(), (byte) c.y(), (byte) 0, c.type(), true, c.caption()));
+            var cursorX = (c.x() - view.getCenterX()) / view.getScale().getValue();
+            var cursorY = (c.y() - view.getCenterZ()) / view.getScale().getValue();
+
+            if (c.caption().isEmpty() || c.caption().isBlank()) {
+                cursors.addCursor(new MapCursor((byte) cursorX, (byte) cursorY, (byte) 0, c.type(), true));
+            } else {
+                cursors.addCursor(new MapCursor((byte) cursorX, (byte) cursorY, (byte) 0, c.type(), true, c.caption()));
+            }
         }
 
         canvas.setCursors(cursors);
