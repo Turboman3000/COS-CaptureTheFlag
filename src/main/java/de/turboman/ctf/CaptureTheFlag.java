@@ -89,7 +89,7 @@ public final class CaptureTheFlag extends JavaPlugin {
             if (TIMER_SEARCH <= 5 && TIMER_SEARCH != 0) {
                 for (var p : Bukkit.getOnlinePlayers()) {
                     p.playSound(Sound.sound(Key.key("minecraft:block.note_block.pling"), Sound.Source.MASTER, 1, 2));
-                    p.sendMessage(mm.deserialize(prefix + "<green>Positions of all Players will be shown on the Map in <gold>" + TIMER_SEARCH + "<green> seconds!"));
+                    p.sendActionBar(mm.deserialize("<green>Positions of all Players will be shown on the Map in <gold>" + TIMER_SEARCH + "<green> seconds!"));
                 }
             }
 
@@ -121,7 +121,7 @@ public final class CaptureTheFlag extends JavaPlugin {
                     }
 
                     p.playSound(Sound.sound(Key.key("minecraft:entity.player.levelup"), Sound.Source.MASTER, 1, 2));
-                    p.sendMessage(mm.deserialize(prefix + "<green>Positions of all Players are shown on the Map!"));
+                    p.sendActionBar(mm.deserialize("<green>Positions of all Players are shown on the Map!"));
                 }
             }
 
