@@ -4,7 +4,6 @@ import de.turboman.ctf.CaptureTheFlag;
 import de.turboman.ctf.maps.MapCursorEntry;
 import de.turboman.ctf.maps.MapManager;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -25,6 +24,8 @@ public class PlayerDeathEvent implements Listener {
         e.setShouldDropExperience(false);
         e.setKeepInventory(true);
         e.setCancelled(true);
+
+        if (deadPlayers.contains(p.getUniqueId())) return;
 
         for (var t : CaptureTheFlag.teamList.values()) {
             if (!t.players().contains(p.getUniqueId())) continue;
