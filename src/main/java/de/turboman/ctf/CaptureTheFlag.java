@@ -104,7 +104,7 @@ public final class CaptureTheFlag extends JavaPlugin {
                         var p = Bukkit.getPlayer(pp);
 
                         assert p != null;
-                        p.teleport(t.flagLocation());
+                        p.teleportAsync(t.flagLocation());
                     }
                 }
 
