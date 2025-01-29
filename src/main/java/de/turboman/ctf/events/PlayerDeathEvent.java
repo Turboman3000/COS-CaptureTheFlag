@@ -1,8 +1,8 @@
 package de.turboman.ctf.events;
 
 import de.turboman.ctf.CaptureTheFlag;
+import de.turboman.ctf.maps.MapCursorEntry;
 import de.turboman.ctf.maps.MapManager;
-import io.papermc.paper.datacomponent.item.MapDecorations;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -30,9 +30,7 @@ public class PlayerDeathEvent implements Listener {
             if (!t.players().contains(p.getUniqueId())) continue;
 
             for (var pp : t.players()) {
-                MapManager.playerMaps.get(pp).decorations().put("death_" + p.getUniqueId(), MapDecorations.decorationEntry(MapCursor.Type.TARGET_X, p.getLocation().getBlockX(), p.getLocation().getBlockZ(), 0));
-
-                Bukkit.getPlayer(pp).getInventory().setItemInOffHand(MapManager.getMapItem(pp));
+                MapManager.playerMaps.get(pp).cursors().put("death_" + p.getUniqueId(), new MapCursorEntry(p.getLocation().getBlockX(), p.getLocation().getBlockZ(), MapCursor.Type.TARGET_X, p.getName()));
             }
         }
 

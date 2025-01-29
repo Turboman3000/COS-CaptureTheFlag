@@ -36,9 +36,7 @@ public class PlayerSneakEvent implements Listener {
                     deadPlayers.remove(near.getUniqueId());
 
                     for (var pp : t.players()) {
-                        MapManager.playerMaps.get(pp).decorations().remove("death_" + near.getUniqueId());
-
-                        Bukkit.getPlayer(pp).getInventory().setItemInOffHand(MapManager.getMapItem(pp));
+                        MapManager.playerMaps.get(pp).cursors().remove("death_" + near.getUniqueId());
                     }
 
                     near.setGlowing(false);

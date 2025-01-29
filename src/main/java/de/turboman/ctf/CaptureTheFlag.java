@@ -4,8 +4,8 @@ import de.maxhenkel.voicechat.api.BukkitVoicechatService;
 import de.maxhenkel.voicechat.api.VoicechatServerApi;
 import de.turboman.ctf.commands.CTFCommand;
 import de.turboman.ctf.events.*;
+import de.turboman.ctf.maps.MapCursorEntry;
 import de.turboman.ctf.maps.MapManager;
-import io.papermc.paper.datacomponent.item.MapDecorations;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
@@ -100,7 +100,7 @@ public final class CaptureTheFlag extends JavaPlugin {
                     for (var pp : Bukkit.getOnlinePlayers()) {
                         if (pp.getUniqueId() == p.getUniqueId()) continue;
 
-                        MapManager.playerMaps.get(p.getUniqueId()).decorations().remove("player_" + pp.getUniqueId());
+                        MapManager.playerMaps.get(p.getUniqueId()).cursors().remove("player_" + pp.getUniqueId());
 
                         boolean isTeam = false;
 
@@ -112,16 +112,14 @@ public final class CaptureTheFlag extends JavaPlugin {
                             }
                         }
 
-                        MapManager.playerMaps.get(p.getUniqueId()).decorations()
+                        MapManager.playerMaps.get(p.getUniqueId()).cursors()
                                 .put("player_" + pp.getUniqueId(),
-                                        MapDecorations.decorationEntry(
-                                                isTeam ? MapCursor.Type.BLUE_MARKER : MapCursor.Type.RED_MARKER,
-                                                pp.getLocation().getBlockX(),
+                                        new MapCursorEntry(pp.getLocation().getBlockX(),
                                                 pp.getLocation().getBlockZ(),
-                                                pp.getLocation().getPitch()));
+                                                isTeam ? MapCursor.Type.BLUE_MARKER : MapCursor.Type.RED_MARKER,
+                                                ""));
                     }
 
-                    p.getInventory().setItemInOffHand(MapManager.getMapItem(p.getUniqueId()));
                     p.playSound(Sound.sound(Key.key("minecraft:entity.player.levelup"), Sound.Source.MASTER, 1, 2));
                     p.sendMessage(mm.deserialize(prefix + "<green>Positions of all Players are shown on the Map!"));
                 }

@@ -1,8 +1,6 @@
 package de.turboman.ctf.maps;
 
 import de.turboman.ctf.CTFTeam;
-import io.papermc.paper.datacomponent.DataComponentTypes;
-import io.papermc.paper.datacomponent.item.MapDecorations;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -22,6 +20,8 @@ public class MapManager {
         var world = player.getLocation().getWorld();
         var border = world.getWorldBorder();
         var view = Bukkit.createMap(world);
+
+        view.addRenderer(new CursorRenderer());
 
         view.setCenterX(border.getCenter().getBlockX());
         view.setCenterZ(border.getCenter().getBlockZ());
@@ -44,8 +44,6 @@ public class MapManager {
 
         MapData data = playerMaps.get(uuid);
         ItemStack mapItem = new ItemStack(Material.FILLED_MAP);
-        mapItem.setData(DataComponentTypes.MAP_DECORATIONS, MapDecorations.mapDecorations(data.decorations()));
-
         MapMeta meta = (MapMeta) mapItem.getItemMeta();
         meta.setMapView(data.view());
         mapItem.setItemMeta(meta);

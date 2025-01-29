@@ -2,8 +2,8 @@ package de.turboman.ctf.events;
 
 import de.turboman.ctf.CaptureTheFlag;
 import de.turboman.ctf.GameState;
+import de.turboman.ctf.maps.MapCursorEntry;
 import de.turboman.ctf.maps.MapManager;
-import io.papermc.paper.datacomponent.item.MapDecorations;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
@@ -58,10 +58,9 @@ public class PlayerPlaceBlockEvent implements Listener {
                         for (var pl : t.players()) {
                             var player = Bukkit.getPlayer(pl);
 
-                            MapManager.playerMaps.get(pl).decorations().put(UUID.randomUUID() + "", MapDecorations.decorationEntry(MapManager.getDecoColor(t), loc.getBlockX(), loc.getBlockZ(), 0));
+                            MapManager.playerMaps.get(pl).cursors().put(UUID.randomUUID() + "", new MapCursorEntry(loc.getBlockX(), loc.getBlockZ(), MapManager.getDecoColor(t), t.name()));
 
                             assert player != null;
-                            player.getInventory().setItemInOffHand(MapManager.getMapItem(pl));
                             player.playSound(Sound.sound(Key.key("minecraft:entity.experience_orb.pickup"), Sound.Source.MASTER, 100, 2));
                             player.sendMessage(mm.deserialize(CaptureTheFlag.prefix + "<green>Flag placed at <gold>" + loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ()));
                         }
