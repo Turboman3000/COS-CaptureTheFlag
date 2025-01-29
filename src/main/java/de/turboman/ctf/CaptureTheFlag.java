@@ -6,6 +6,7 @@ import de.turboman.ctf.commands.CTFCommand;
 import de.turboman.ctf.events.*;
 import de.turboman.ctf.maps.MapCursorEntry;
 import de.turboman.ctf.maps.MapManager;
+import io.papermc.paper.scoreboard.numbers.NumberFormat;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
@@ -16,6 +17,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.map.MapCursor;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scoreboard.Criteria;
+import org.bukkit.scoreboard.DisplaySlot;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Scoreboard;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -30,6 +35,8 @@ public final class CaptureTheFlag extends JavaPlugin {
     public static VoicechatServerApi voicechatAPI;
     public static final String prefix = "<dark_aqua>Capture the Flag <gold>⇒<reset> ";
     public static Plugin plugin;
+    public static Scoreboard scoreboard;
+    public static Objective scoreObjec;
 
     public static long PREP_TIME = 60;
     public static long FIGHT_TIME = 60;
@@ -68,6 +75,11 @@ public final class CaptureTheFlag extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerDeathEvent(), this);
 
         Objects.requireNonNull(getCommand("ctf")).setExecutor(new CTFCommand());
+
+        scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
+        scoreObjec = scoreboard.registerNewObjective("score", Criteria.DUMMY, mm.deserialize("<dark_gray><--- <dark_aqua><b>Scores</b><dark_gray> --->"));
+        scoreObjec.setDisplaySlot(DisplaySlot.SIDEBAR);
+        scoreObjec.numberFormat(NumberFormat.blank());
 
         Bukkit.getConsoleSender().sendMessage(mm.deserialize(prefix + "<green>Plugin enabled"));
     }

@@ -221,11 +221,29 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
 
                         for (var pl : Bukkit.getOnlinePlayers()) {
                             pl.getInventory().clear();
+                            pl.setScoreboard(scoreboard);
                         }
 
                         GAME_STATE = GameState.SET_FLAG;
 
+                        int score = 0;
+
                         for (var t : teamList.values()) {
+                            scoreObjec.getScore("t2_" + t.id()).customName(mm.deserialize(" "));
+                            scoreObjec.getScore("t2_" + t.id()).setScore(score);
+
+                            score--;
+
+                            scoreObjec.getScore("t0_" + t.id()).customName(mm.deserialize("<" + t.color() + ">" + t.name() + " <dark_gray>-<green><b> ✓"));
+                            scoreObjec.getScore("t0_" + t.id()).setScore(score);
+
+                            score--;
+
+                            scoreObjec.getScore("t1_" + t.id()).customName(mm.deserialize("    <gold>0"));
+                            scoreObjec.getScore("t1_" + t.id()).setScore(score);
+
+                            score--;
+
                             t.bossBar().progress(1f);
                             t.bossBar().name(mm.deserialize("<aqua>Set your Flag!"));
                             t.bossBar().color(BossBar.Color.BLUE);
