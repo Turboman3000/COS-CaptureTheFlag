@@ -29,13 +29,17 @@ public class VoicechatPlugin implements de.maxhenkel.voicechat.api.VoicechatPlug
         if (event.getConnection() == null) return;
         Player player = (Player) event.getConnection().getPlayer().getPlayer();
 
-        if(player.isOp()) return;
+        if (player.isOp()) return;
 
         player.sendMessage(mm.deserialize(CaptureTheFlag.prefix + "<red>You cannot create a group!"));
         event.cancel();
     }
 
     private void onGroupLeave(LeaveGroupEvent event) {
+        Player p = (Player) Objects.requireNonNull(event.getConnection()).getPlayer().getPlayer();
+
+        if (CaptureTheFlag.deadPlayers.contains(p.getUniqueId())) return;
+
         if (Objects.requireNonNull(event.getGroup()).isHidden() && event.getGroup().isPersistent()) {
             event.cancel();
         }

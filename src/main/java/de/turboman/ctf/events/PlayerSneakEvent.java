@@ -2,7 +2,6 @@ package de.turboman.ctf.events;
 
 import de.turboman.ctf.CaptureTheFlag;
 import de.turboman.ctf.maps.MapManager;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -38,6 +37,8 @@ public class PlayerSneakEvent implements Listener {
                     for (var pp : t.players()) {
                         MapManager.playerMaps.get(pp).cursors().remove("death_" + near.getUniqueId());
                     }
+
+                    CaptureTheFlag.voicechatAPI.getConnectionOf(near.getUniqueId()).setGroup(t.voiceGroup());
 
                     near.setGlowing(false);
                     near.removePotionEffect(PotionEffectType.DARKNESS);

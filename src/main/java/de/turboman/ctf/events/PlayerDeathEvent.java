@@ -36,6 +36,7 @@ public class PlayerDeathEvent implements Listener {
         }
 
         deadPlayers.add(p.getUniqueId());
+        CaptureTheFlag.voicechatAPI.getConnectionOf(p.getUniqueId()).setGroup(null);
 
         p.sendMessage(mm.deserialize(prefix + "<red><b>You're dead!<!b><green> Wait for a Teammate to revive you!"));
         p.setGlowing(true);
