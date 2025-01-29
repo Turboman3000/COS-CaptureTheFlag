@@ -125,7 +125,10 @@ public final class CaptureTheFlag extends JavaPlugin {
                 }
             }
 
-            TIMER_SEARCH--;
+            if (GAME_STATE == GameState.FIGHT) {
+                TIMER_SEARCH--;
+            }
+
             TIMER_SECONDS--;
 
             if (TIMER_SECONDS == -1) {
