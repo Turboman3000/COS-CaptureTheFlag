@@ -83,6 +83,12 @@ public class PlayerPlaceBlockEvent implements Listener {
                         teamSet++;
                         t.flagLocation(loc);
 
+                        for (var x = -1; x <= 1; x++) {
+                            for (var z = -1; z <= 1; z++) {
+                                loc.clone().add(x, -1, z).getBlock().setType(Material.BEDROCK);
+                            }
+                        }
+
                         for (var pl : t.players()) {
                             var player = Bukkit.getPlayer(pl);
 
