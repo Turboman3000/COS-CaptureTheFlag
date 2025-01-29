@@ -10,6 +10,7 @@ import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -26,6 +27,11 @@ public class PlayerPlaceBlockEvent implements Listener {
         Player p = e.getPlayer();
 
         if (p.getGameMode() == GameMode.CREATIVE) return;
+
+        if (e.getBlockAgainst().getType() == Material.BEDROCK) {
+            e.setCancelled(true);
+            return;
+        }
 
         if (CaptureTheFlag.deadPlayers.contains(p.getUniqueId())) {
             e.setCancelled(true);
