@@ -229,18 +229,18 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
                         int score = 0;
 
                         for (var t : teamList.values()) {
-                            scoreObjec.getScore("t2_" + t.id()).customName(mm.deserialize(" "));
-                            scoreObjec.getScore("t2_" + t.id()).setScore(score);
-
-                            score--;
-
-                            scoreObjec.getScore("t0_" + t.id()).customName(mm.deserialize("<" + t.color() + ">" + t.name() + " <dark_gray>-<green><b> ✓"));
+                            scoreObjec.getScore("t0_" + t.id()).customName(mm.deserialize(" "));
                             scoreObjec.getScore("t0_" + t.id()).setScore(score);
 
                             score--;
 
-                            scoreObjec.getScore("t1_" + t.id()).customName(mm.deserialize("    <gold>0"));
+                            scoreObjec.getScore("t1_" + t.id()).customName(mm.deserialize("<" + t.color() + ">" + t.name() + " <dark_gray>-<green><b> ✓"));
                             scoreObjec.getScore("t1_" + t.id()).setScore(score);
+
+                            score--;
+
+                            scoreObjec.getScore("t2_" + t.id()).customName(mm.deserialize("    <gold>0"));
+                            scoreObjec.getScore("t2_" + t.id()).setScore(score);
 
                             score--;
 
@@ -248,6 +248,11 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
                             t.bossBar().name(mm.deserialize("<aqua>Set your Flag!"));
                             t.bossBar().color(BossBar.Color.BLUE);
                         }
+
+                        score--;
+
+                        scoreObjec.getScore("end").customName(mm.deserialize(" "));
+                        scoreObjec.getScore("end").setScore(score);
 
                         var random = new Random();
                         var world = Objects.requireNonNull(Bukkit.getWorld("world"));

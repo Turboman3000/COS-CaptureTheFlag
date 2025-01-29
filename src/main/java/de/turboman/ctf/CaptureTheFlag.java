@@ -77,7 +77,7 @@ public final class CaptureTheFlag extends JavaPlugin {
         Objects.requireNonNull(getCommand("ctf")).setExecutor(new CTFCommand());
 
         scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
-        scoreObjec = scoreboard.registerNewObjective("score", Criteria.DUMMY, mm.deserialize("<dark_gray><--- <dark_aqua><b>Scores</b><dark_gray> --->"));
+        scoreObjec = scoreboard.registerNewObjective("score", Criteria.DUMMY, mm.deserialize("<dark_gray><--- <dark_aqua>Capture the Flag<dark_gray> --->"));
         scoreObjec.setDisplaySlot(DisplaySlot.SIDEBAR);
         scoreObjec.numberFormat(NumberFormat.blank());
 
