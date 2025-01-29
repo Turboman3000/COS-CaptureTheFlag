@@ -17,6 +17,7 @@ public class CTFTeam {
     private UUID leader = null;
     private Location flagLocation = null;
     private UUID flagStolenBy = null;
+    private int score = 0;
 
     public CTFTeam(UUID id, String name, String color, ArrayList<UUID> players, Group voiceGroup, BossBar bossBar) {
         this.id = id;
@@ -73,5 +74,13 @@ public class CTFTeam {
 
     public void flagStolenBy(UUID flagStolenBy) {
         this.flagStolenBy = flagStolenBy;
+    }
+
+    public int score() {
+        return score;
+    }
+
+    public void score(int score) {
+        this.score = score;
     }
 }
