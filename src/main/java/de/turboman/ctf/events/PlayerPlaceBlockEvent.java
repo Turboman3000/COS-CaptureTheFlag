@@ -29,6 +29,8 @@ public class PlayerPlaceBlockEvent implements Listener {
         if (p.getGameMode() == GameMode.CREATIVE) return;
 
         if (e.getBlockAgainst().getType() == Material.BEDROCK) {
+            p.sendMessage(mm.deserialize(CaptureTheFlag.prefix + "<red>You can't place blocks here!"));
+
             e.setCancelled(true);
             return;
         }
