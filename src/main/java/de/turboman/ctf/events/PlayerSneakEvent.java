@@ -41,6 +41,8 @@ public class PlayerSneakEvent implements Listener {
                     CaptureTheFlag.voicechatAPI.getConnectionOf(near.getUniqueId()).setGroup(t.voiceGroup());
 
                     near.setGlowing(false);
+                    near.removePotionEffect(PotionEffectType.REGENERATION);
+                    near.removePotionEffect(PotionEffectType.RESISTANCE);
                     near.removePotionEffect(PotionEffectType.DARKNESS);
                 }
             }
