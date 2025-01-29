@@ -72,7 +72,7 @@ public class PlayerPlaceBlockEvent implements Listener {
 
                         var loc = e.getBlock().getLocation();
 
-                        Interaction interEntity = (Interaction) loc.getWorld().spawnEntity(loc, EntityType.INTERACTION);
+                        Interaction interEntity = (Interaction) loc.getWorld().spawnEntity(loc.add(0.5d, 0, 0.5d), EntityType.INTERACTION);
 
                         interEntity.setInteractionHeight(2);
                         interEntity.setInteractionWidth(1);
