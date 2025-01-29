@@ -39,7 +39,7 @@ public class EntityInteractionEvent implements Listener {
                 Bukkit.getPlayer(pp).sendMessage(mm.deserialize(CaptureTheFlag.prefix + "<red>" + e.getPlayer().getName() + " stole your Team's flag!"));
             }
 
-            CaptureTheFlag.scoreObjec.getScore("t0_" + team.id()).customName(mm.deserialize("<" + team.color() + ">" + team.name() + " <dark_gray>-<green><b> x"));
+            CaptureTheFlag.scoreObjec.getScore("t1_" + team.id()).customName(mm.deserialize("<" + team.color() + ">" + team.name() + " <dark_gray>-<red><b> x"));
 
             e.getRightClicked().getLocation().getBlock().setType(Material.AIR);
             e.getRightClicked().remove();
