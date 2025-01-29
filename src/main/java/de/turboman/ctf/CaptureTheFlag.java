@@ -57,6 +57,7 @@ public final class CaptureTheFlag extends JavaPlugin {
             Bukkit.getConsoleSender().sendMessage(mm.deserialize(prefix + "<red>VoiceChat plugin not found"));
         }
 
+        getServer().getPluginManager().registerEvents(new EntityInteractionEvent(), this);
         getServer().getPluginManager().registerEvents(new PlayerSneakEvent(), this);
         getServer().getPluginManager().registerEvents(new PlayerMoveEvent(), this);
         getServer().getPluginManager().registerEvents(new PlayerPlaceBlockEvent(), this);
