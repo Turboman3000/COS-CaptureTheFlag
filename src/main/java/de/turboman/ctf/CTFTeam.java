@@ -16,6 +16,7 @@ public class CTFTeam {
     private final BossBar bossBar;
     private UUID leader = null;
     private Location flagLocation = null;
+    private UUID flagStolenBy = null;
 
     public CTFTeam(UUID id, String name, String color, ArrayList<UUID> players, Group voiceGroup, BossBar bossBar) {
         this.id = id;
@@ -64,5 +65,13 @@ public class CTFTeam {
 
     public BossBar bossBar() {
         return bossBar;
+    }
+
+    public UUID flagStolenBy() {
+        return flagStolenBy;
+    }
+
+    public void flagStolenBy(UUID flagStolenBy) {
+        this.flagStolenBy = flagStolenBy;
     }
 }
