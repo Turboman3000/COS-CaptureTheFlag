@@ -2,6 +2,7 @@ package de.turboman.ctf.events;
 
 import de.turboman.ctf.CaptureTheFlag;
 import org.bukkit.GameMode;
+import org.bukkit.Tag;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -15,6 +16,11 @@ public class PlayerBreakBlockEvent implements Listener {
 
         if (p.getGameMode() == GameMode.CREATIVE) return;
         if (CaptureTheFlag.deadPlayers.contains(p.getUniqueId())) {
+            e.setCancelled(true);
+            return;
+        }
+
+        if (Tag.BANNERS.isTagged(e.getBlock().getType())) {
             e.setCancelled(true);
             return;
         }
