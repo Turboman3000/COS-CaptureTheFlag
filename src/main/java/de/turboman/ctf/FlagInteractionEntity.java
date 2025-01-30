@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public class FlagInteractionEntity {
 
-    public static void getEntity(UUID id, Location loc) {
+    public static void spawnEntity(UUID id, Location loc) {
         Interaction interEntity = (Interaction) loc.getWorld().spawnEntity(loc, EntityType.INTERACTION);
 
         interEntity.setInteractionHeight(2);

@@ -76,7 +76,7 @@ public class PlayerPlaceBlockEvent implements Listener {
 
                         var loc = e.getBlock().getLocation();
 
-                        FlagInteractionEntity.getEntity(t.id(), loc.add(0.5d, 0, 0.5d));
+                        FlagInteractionEntity.spawnEntity(t.id(), loc.add(0.5d, 0, 0.5d));
 
                         teamSet++;
                         t.flagLocation(loc);

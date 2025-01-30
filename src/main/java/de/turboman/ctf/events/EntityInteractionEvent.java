@@ -46,7 +46,7 @@ public class EntityInteractionEvent implements Listener {
                     t2.flagStolenBy(null);
 
                     t2.flagLocation().getBlock().setType(CTFCommand.getFlagItem(t2).getType());
-                    FlagInteractionEntity.getEntity(t2.id(), t2.flagLocation());
+                    FlagInteractionEntity.spawnEntity(t2.id(), t2.flagLocation());
                     CaptureTheFlag.scoreObjec.getScore("t1_" + t2.id()).customName(mm.deserialize("<" + t2.color() + ">" + t2.name() + " <dark_gray>-<green><b> ✓"));
 
                     for (var p : Bukkit.getOnlinePlayers()) {

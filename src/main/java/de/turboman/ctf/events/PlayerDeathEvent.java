@@ -44,7 +44,7 @@ public class PlayerDeathEvent implements Listener {
 
                 p.getLocation().getBlock().setType(CTFCommand.getFlagItem(tt).getType());
                 p.getLocation().add(0, -1, 0).getBlock().setType(Material.BEDROCK);
-                FlagInteractionEntity.getEntity(tt.id(), p.getLocation());
+                FlagInteractionEntity.spawnEntity(tt.id(), p.getLocation());
 
                 break;
             }
