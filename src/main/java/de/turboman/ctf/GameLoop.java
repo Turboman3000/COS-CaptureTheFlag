@@ -140,7 +140,7 @@ public class GameLoop implements Consumer<ScheduledTask> {
 
         if (GAME_STATE == GameState.FIGHT) {
             for (var t2 : teamList.values()) {
-                if (t2.flagStolenBy() != null) {
+                if (t2.flagStolenBy() == null) {
                     t2.score(t2.score() + 1);
                 }
 
