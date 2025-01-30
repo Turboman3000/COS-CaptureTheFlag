@@ -53,6 +53,15 @@ public class EntityInteractionEvent implements Listener {
                         p.sendMessage(mm.deserialize(CaptureTheFlag.prefix + "<" + t2.color() + ">" + t2.name() + "'s<green> Flag was captured by <gold>" + e.getPlayer().getName() + "<" + team.color() + "> (" + team.name() + ")"));
                     }
 
+                    for (var ent : e.getPlayer().getWorld().getEntities()) {
+                        if (ent.getType() != EntityType.ITEM_DISPLAY) continue;
+                        if (!ent.getScoreboardTags().contains("stolenFlag_" + t2.id())) continue;
+
+                        ent.remove();
+
+                        break;
+                    }
+
                     return;
                 }
 
