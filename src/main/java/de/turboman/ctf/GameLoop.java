@@ -25,6 +25,7 @@ public class GameLoop implements Consumer<ScheduledTask> {
     @Override
     public void accept(ScheduledTask task) {
         if (TIMER_SECONDS <= 5
+                && TIMER_SECONDS != 0
                 && TIMER_HOURS == 0
                 && TIMER_MINUTES == 0
                 && GAME_STATE == GameState.PREP) {
