@@ -8,6 +8,7 @@ import de.turboman.ctf.maps.MapManager;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -45,6 +46,15 @@ public class PlayerDeathEvent implements Listener {
                 p.getLocation().getBlock().setType(CTFCommand.getFlagItem(tt).getType());
                 p.getLocation().add(0, -1, 0).getBlock().setType(Material.BEDROCK);
                 FlagInteractionEntity.spawnEntity(tt.id(), p.getLocation());
+
+                for (var ent : e.getPlayer().getWorld().getEntities()) {
+                    if (ent.getType() != EntityType.ITEM_DISPLAY) continue;
+                    if (!ent.getScoreboardTags().contains("stolenFlag_" + tt.id())) continue;
+
+                    ent.remove();
+
+                    break;
+                }
 
                 break;
             }
