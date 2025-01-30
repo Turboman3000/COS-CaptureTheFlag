@@ -131,11 +131,12 @@ public class GameLoop implements Consumer<ScheduledTask> {
 
             if (t2.flagStolenBy() != null) {
                 addition = -1;
+            }
 
-                for (var t3 : teamList.values()) {
-                    if (!t3.players().contains(t2.flagStolenBy())) continue;
-
+            for (var t3 : teamList.values()) {
+                if (t2.players().contains(t3.flagStolenBy())) {
                     addition = 0.5f;
+                    break;
                 }
             }
 
