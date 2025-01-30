@@ -34,6 +34,8 @@ public class PlayerDeathEvent implements Listener {
         for (var t : CaptureTheFlag.teamList.values()) {
             if (!t.players().contains(p.getUniqueId())) continue;
 
+            t.score(t.score() - 15);
+
             teamSize = t.players().size();
 
             for (var pp : t.players()) {
@@ -69,9 +71,10 @@ public class PlayerDeathEvent implements Listener {
                     ppp.removePotionEffect(PotionEffectType.RESISTANCE);
                     ppp.removePotionEffect(PotionEffectType.DARKNESS);
 
+                    ppp.teleport(t.flagLocation());
                     ppp.teleportAsync(t.flagLocation());
 
-                    p.sendMessage(mm.deserialize(prefix + "<red>Your entire Team is dead, it's getting Respawned at the Team's flag"));
+                    p.sendMessage(mm.deserialize(prefix + "<red>Your entire Team is dead, you're getting Respawned at the Team's flag"));
                 }
             }
 
