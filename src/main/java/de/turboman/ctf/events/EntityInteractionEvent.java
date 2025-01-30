@@ -24,7 +24,7 @@ public class EntityInteractionEvent implements Listener {
     @EventHandler
     public void onEvent(PlayerInteractAtEntityEvent e) {
         if (CaptureTheFlag.GAME_STATE != GameState.FIGHT) {
-            e.getPlayer().sendMessage(mm.deserialize(CaptureTheFlag.prefix + "<red>You can steel flags only in the Battle Phase!"));
+            e.getPlayer().sendMessage(mm.deserialize(CaptureTheFlag.prefix + "<red>You can steal flags only in the Battle Phase!"));
             return;
         }
 
@@ -37,7 +37,7 @@ public class EntityInteractionEvent implements Listener {
             var team = CaptureTheFlag.teamList.get(UUID.fromString(id));
 
             if (team.players().contains(e.getPlayer().getUniqueId())) {
-                e.getPlayer().sendMessage(mm.deserialize(CaptureTheFlag.prefix + "<red>You can't steel your own Team's flag"));
+                e.getPlayer().sendMessage(mm.deserialize(CaptureTheFlag.prefix + "<red>You can't steal your own Team's flag"));
                 continue;
             }
 
