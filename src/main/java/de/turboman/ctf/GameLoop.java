@@ -126,30 +126,26 @@ public class GameLoop implements Consumer<ScheduledTask> {
         var progress = (float) getTimerSecs() / TIMER_TOTAL_SECONDS;
         var timeText = String.format("%02d", TIMER_HOURS) + ":" + String.format("%02d", TIMER_MINUTES) + ":" + String.format("%02d", TIMER_SECONDS);
 
-        if (GAME_STATE == GameState.PREP) {
-            for (var t2 : teamList.values()) {
-                t2.score(t2.score() + 1);
+        for (var t2 : teamList.values()) {
+            float addition = 1;
 
-                scoreObjec.getScore("t2_" + t2.id()).customName(mm.deserialize("    <gold>" + t2.score()));
+            if (t2.flagStolenBy() != null) {
+                addition = -1;
 
-                t2.bossBar().name(mm.deserialize("<green>Preparation Time<gold> " + timeText));
-                t2.bossBar().color(BossBar.Color.GREEN);
-                t2.bossBar().progress(progress);
-            }
-        }
+                for (var t3 : teamList.values()) {
+                    if (!t3.players().contains(t2.flagStolenBy())) continue;
 
-        if (GAME_STATE == GameState.FIGHT) {
-            for (var t2 : teamList.values()) {
-                if (t2.flagStolenBy() == null) {
-                    t2.score(t2.score() + 1);
+                    addition = 0.5f;
                 }
-
-                scoreObjec.getScore("t2_" + t2.id()).customName(mm.deserialize("    <gold>" + t2.score()));
-
-                t2.bossBar().name(mm.deserialize("<green>Battle Time<gold> " + timeText));
-                t2.bossBar().color(BossBar.Color.GREEN);
-                t2.bossBar().progress(progress);
             }
+
+            t2.score(t2.score() + addition);
+
+            scoreObjec.getScore("t2_" + t2.id()).customName(mm.deserialize("    <gold>" + (int) t2.score()));
+
+            t2.bossBar().name(mm.deserialize((GAME_STATE == GameState.FIGHT ? "<green>Battle Time" : "<green>Preparation Time") + "<gold> " + timeText));
+            t2.bossBar().color(BossBar.Color.GREEN);
+            t2.bossBar().progress(progress);
         }
     }
 
