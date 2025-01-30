@@ -11,6 +11,7 @@ import net.kyori.adventure.title.Title;
 import net.kyori.adventure.title.TitlePart;
 import org.bukkit.Bukkit;
 import org.bukkit.map.MapCursor;
+import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
@@ -56,6 +57,9 @@ public class GameLoop implements Consumer<ScheduledTask> {
                 p.sendTitlePart(TitlePart.TIMES, Title.Times.times(Duration.ZERO, Duration.ofMillis(2500), Duration.ofMillis(2500)));
                 p.sendTitlePart(TitlePart.TITLE, mm.deserialize(""));
                 p.sendTitlePart(TitlePart.SUBTITLE, mm.deserialize("<gold><b>It's Battle Time!"));
+
+                p.removePotionEffect(PotionEffectType.REGENERATION);
+                p.removePotionEffect(PotionEffectType.RESISTANCE);
 
                 p.sendMessage(mm.deserialize(prefix + "<green>It's Time to Fight! Use the resources that you've collected to fight for your Team and to protect your Team's flag!"));
                 p.playSound(Sound.sound(Key.key("minecraft:entity.ender_dragon.growl"), Sound.Source.MASTER, 0.7f, 1));

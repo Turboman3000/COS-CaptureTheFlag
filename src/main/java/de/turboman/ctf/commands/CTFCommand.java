@@ -224,6 +224,9 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
                         for (var pl : Bukkit.getOnlinePlayers()) {
                             pl.getInventory().clear();
                             pl.setScoreboard(scoreboard);
+
+                            pl.addPotionEffect(new PotionEffect(PotionEffectType.RESISTANCE, Integer.MAX_VALUE, 255, false, false));
+                            pl.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, Integer.MAX_VALUE, 255, false, false));
                             pl.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, Integer.MAX_VALUE, 255, false, false));
                         }
 
