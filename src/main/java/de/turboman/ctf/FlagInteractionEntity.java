@@ -1,0 +1,20 @@
+package de.turboman.ctf;
+
+import org.bukkit.Location;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Interaction;
+
+import java.util.UUID;
+
+public class FlagInteractionEntity {
+
+    public static void getEntity(UUID id, Location loc) {
+        Interaction interEntity = (Interaction) loc.getWorld().spawnEntity(loc.add(0.5d, 0, 0.5d), EntityType.INTERACTION);
+
+        interEntity.setInteractionHeight(2);
+        interEntity.setInteractionWidth(1);
+        interEntity.setResponsive(true);
+        interEntity.setPersistent(true);
+        interEntity.addScoreboardTag("teamFlag_" + id);
+    }
+}

@@ -1,7 +1,9 @@
 package de.turboman.ctf.events;
 
 import de.turboman.ctf.CaptureTheFlag;
+import de.turboman.ctf.FlagInteractionEntity;
 import de.turboman.ctf.GameState;
+import de.turboman.ctf.commands.CTFCommand;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -37,8 +39,26 @@ public class EntityInteractionEvent implements Listener {
             var team = CaptureTheFlag.teamList.get(UUID.fromString(id));
 
             if (team.players().contains(e.getPlayer().getUniqueId())) {
+                for (var t2 : CaptureTheFlag.teamList.values()) {
+                    if (t2.flagStolenBy() != e.getPlayer().getUniqueId()) continue;
+
+                    team.score(team.score() + 30);
+                    t2.flagStolenBy(null);
+
+                    t2.flagLocation().getBlock().setType(CTFCommand.getFlagItem(t2).getType());
+                    FlagInteractionEntity.getEntity(t2.id(), t2.flagLocation());
+
+                    CaptureTheFlag.scoreObjec.getScore("t1_" + team.id()).customName(mm.deserialize("<" + team.color() + ">" + team.name() + " <dark_gray>-<green><b> ✓"));
+
+                    for (var p : Bukkit.getOnlinePlayers()) {
+                        p.sendMessage(mm.deserialize(CaptureTheFlag.prefix + "<" + t2.color() + ">" + t2.name() + "'s<green> Flag was captured by <gold>" + e.getPlayer().getName() + "<" + team.color() + "> (" + team.name() + ")"));
+                    }
+
+                    return;
+                }
+
                 e.getPlayer().sendMessage(mm.deserialize(CaptureTheFlag.prefix + "<red>You can't steal your own Team's flag"));
-                continue;
+                break;
             }
 
             for (var pp : team.players()) {

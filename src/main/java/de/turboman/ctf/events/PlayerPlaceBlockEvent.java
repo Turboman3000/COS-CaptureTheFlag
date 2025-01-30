@@ -1,6 +1,7 @@
 package de.turboman.ctf.events;
 
 import de.turboman.ctf.CaptureTheFlag;
+import de.turboman.ctf.FlagInteractionEntity;
 import de.turboman.ctf.GameState;
 import de.turboman.ctf.maps.MapCursorEntry;
 import de.turboman.ctf.maps.MapManager;
@@ -12,7 +13,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Tag;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Interaction;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -72,13 +72,7 @@ public class PlayerPlaceBlockEvent implements Listener {
 
                         var loc = e.getBlock().getLocation();
 
-                        Interaction interEntity = (Interaction) loc.getWorld().spawnEntity(loc.add(0.5d, 0, 0.5d), EntityType.INTERACTION);
-
-                        interEntity.setInteractionHeight(2);
-                        interEntity.setInteractionWidth(1);
-                        interEntity.setResponsive(true);
-                        interEntity.setPersistent(true);
-                        interEntity.addScoreboardTag("teamFlag_" + t.id());
+                        FlagInteractionEntity.getEntity(t.id(), loc);
 
                         teamSet++;
                         t.flagLocation(loc);

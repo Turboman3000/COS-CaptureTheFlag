@@ -392,7 +392,7 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
         return true;
     }
 
-    private static @Nullable ItemStack getFlagItem(CTFTeam t) {
+    public static @Nullable ItemStack getFlagItem(CTFTeam t) {
         return switch (t.color()) {
             case "black" -> new ItemStack(Material.BLACK_BANNER);
             case "dark_blue" -> new ItemStack(Material.BLUE_BANNER);
