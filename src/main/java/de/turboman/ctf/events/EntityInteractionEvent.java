@@ -65,6 +65,12 @@ public class EntityInteractionEvent implements Listener {
                     return;
                 }
 
+                if (team.flagLocation() != e.getRightClicked().getLocation()) {
+                    FlagInteractionEntity.spawnEntity(team.id(), team.flagLocation());
+                    team.flagLocation().getBlock().setType(CTFCommand.getFlagItem(team).getType());
+                    e.getRightClicked().getLocation().getBlock().setType(Material.AIR);
+                }
+
                 e.getPlayer().sendMessage(mm.deserialize(CaptureTheFlag.prefix + "<red>You can't steal your own Team's flag"));
                 break;
             }

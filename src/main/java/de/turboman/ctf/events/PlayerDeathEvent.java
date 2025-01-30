@@ -44,8 +44,9 @@ public class PlayerDeathEvent implements Listener {
                 if (tt.flagStolenBy() != p.getUniqueId()) continue;
 
                 p.getLocation().getBlock().setType(CTFCommand.getFlagItem(tt).getType());
-                p.getLocation().add(0, -1, 0).getBlock().setType(Material.BEDROCK);
                 FlagInteractionEntity.spawnEntity(tt.id(), p.getLocation());
+
+                tt.flagStolenBy(null);
 
                 for (var ent : e.getPlayer().getWorld().getEntities()) {
                     if (ent.getType() != EntityType.ITEM_DISPLAY) continue;
