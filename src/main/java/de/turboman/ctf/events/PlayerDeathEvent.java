@@ -1,10 +1,13 @@
 package de.turboman.ctf.events;
 
 import de.turboman.ctf.CaptureTheFlag;
+import de.turboman.ctf.FlagInteractionEntity;
+import de.turboman.ctf.commands.CTFCommand;
 import de.turboman.ctf.maps.MapCursorEntry;
 import de.turboman.ctf.maps.MapManager;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -35,6 +38,16 @@ public class PlayerDeathEvent implements Listener {
             if (!t.players().contains(p.getUniqueId())) continue;
 
             t.score(t.score() - 15);
+
+            for (var tt : CaptureTheFlag.teamList.values()) {
+                if (tt.flagStolenBy() != p.getUniqueId()) continue;
+
+                p.getLocation().getBlock().setType(CTFCommand.getFlagItem(tt).getType());
+                p.getLocation().add(0, -1, 0).getBlock().setType(Material.BEDROCK);
+                FlagInteractionEntity.getEntity(tt.id(), p.getLocation());
+
+                break;
+            }
 
             teamSize = t.players().size();
 
