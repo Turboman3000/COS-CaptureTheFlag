@@ -69,6 +69,11 @@ public class PlayerPlaceBlockEvent implements Listener {
                     for (var t : CaptureTheFlag.teamList.values()) {
                         if (t.leader() != p.getUniqueId()) continue;
 
+                        if (e.getBlock().isLiquid()) {
+                            e.setCancelled(true);
+                            return;
+                        }
+
                         var loc = e.getBlock().getLocation();
 
                         FlagInteractionEntity.getEntity(t.id(), loc.add(0.5d, 0, 0.5d));
