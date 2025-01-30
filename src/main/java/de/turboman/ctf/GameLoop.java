@@ -130,6 +130,8 @@ public class GameLoop implements Consumer<ScheduledTask> {
             for (var t2 : teamList.values()) {
                 t2.score(t2.score() + 1);
 
+                scoreObjec.getScore("t2_" + t2.id()).customName(mm.deserialize("    <gold>" + t2.score()));
+
                 t2.bossBar().name(mm.deserialize("<green>Preparation Time<gold> " + timeText));
                 t2.bossBar().color(BossBar.Color.GREEN);
                 t2.bossBar().progress(progress);
@@ -141,6 +143,8 @@ public class GameLoop implements Consumer<ScheduledTask> {
                 if (t2.flagStolenBy() != null) {
                     t2.score(t2.score() + 1);
                 }
+
+                scoreObjec.getScore("t2_" + t2.id()).customName(mm.deserialize("    <gold>" + t2.score()));
 
                 t2.bossBar().name(mm.deserialize("<green>Battle Time<gold> " + timeText));
                 t2.bossBar().color(BossBar.Color.GREEN);
