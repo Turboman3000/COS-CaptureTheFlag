@@ -48,7 +48,7 @@ public class EntityInteractionEvent implements Listener {
             CaptureTheFlag.scoreObjec.getScore("t1_" + team.id()).customName(mm.deserialize("<" + team.color() + ">" + team.name() + " <dark_gray>-<red><b> x"));
 
             ItemDisplay itemEntity = (ItemDisplay) e.getPlayer().getLocation().getWorld().spawnEntity(e.getPlayer().getLocation(), EntityType.ITEM_DISPLAY);
-            Transformation transform = new Transformation(new Vector3f(0, 0, 0.5f), new AxisAngle4f(-0.629f, -0.777f, 0, 0), new Vector3f(1), new AxisAngle4f());
+            Transformation transform = new Transformation(new Vector3f(0, 0, 0.5f), new AxisAngle4f(1, 0, 0, 0), new Vector3f(1), new AxisAngle4f());
 
             itemEntity.setTransformation(transform);
             itemEntity.setBillboard(Display.Billboard.FIXED);
