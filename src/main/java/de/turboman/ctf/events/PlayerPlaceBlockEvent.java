@@ -69,7 +69,12 @@ public class PlayerPlaceBlockEvent implements Listener {
                     for (var t : CaptureTheFlag.teamList.values()) {
                         if (t.leader() != p.getUniqueId()) continue;
 
-                        if (e.getBlock().getLocation().add(0, 1, 0).getBlock().isLiquid()) {
+                        if (e.getBlockPlaced().isLiquid()) {
+                            e.setCancelled(true);
+                            return;
+                        }
+
+                        if (e.getBlockPlaced().getLocation().getBlockY() <= e.getBlock().getWorld().getSeaLevel()) {
                             e.setCancelled(true);
                             return;
                         }
