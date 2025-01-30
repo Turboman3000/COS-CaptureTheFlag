@@ -23,12 +23,12 @@ public class EntityInteractionEvent implements Listener {
 
     @EventHandler
     public void onEvent(PlayerInteractAtEntityEvent e) {
+        if (e.getRightClicked().getType() != EntityType.INTERACTION) return;
+
         if (CaptureTheFlag.GAME_STATE != GameState.FIGHT) {
             e.getPlayer().sendMessage(mm.deserialize(CaptureTheFlag.prefix + "<red>You can steal flags only in the Battle Phase!"));
             return;
         }
-
-        if (e.getRightClicked().getType() != EntityType.INTERACTION) return;
 
         for (var tag : e.getRightClicked().getScoreboardTags()) {
             if (!tag.startsWith("teamFlag_")) continue;
