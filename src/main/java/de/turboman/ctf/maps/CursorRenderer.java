@@ -20,7 +20,9 @@ public class CursorRenderer extends MapRenderer {
             if (!t.players().contains(player.getUniqueId())) continue;
 
             if (t.flagStolenBy() != null) {
-                player.sendActionBar(mm.deserialize("<red>Flag stolen by <dark_red><b>" + Bukkit.getPlayer(t.flagStolenBy()).getName() + "</b><red>!"));
+                if (CaptureTheFlag.TIMER_SEARCH > 5) {
+                    player.sendActionBar(mm.deserialize("<red>Flag stolen by <dark_red><b>" + Bukkit.getPlayer(t.flagStolenBy()).getName() + "</b><red>!"));
+                }
 
                 for (int x = 0; x <= 127; x++) {
                     for (int y = 0; y <= 127; y++) {
