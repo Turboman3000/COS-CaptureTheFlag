@@ -9,7 +9,7 @@ import java.util.UUID;
 public class FlagInteractionEntity {
 
     public static void getEntity(UUID id, Location loc) {
-        Interaction interEntity = (Interaction) loc.getWorld().spawnEntity(loc.add(0.5d, 0, 0.5d), EntityType.INTERACTION);
+        Interaction interEntity = (Interaction) loc.getWorld().spawnEntity(loc, EntityType.INTERACTION);
 
         interEntity.setInteractionHeight(2);
         interEntity.setInteractionWidth(1);

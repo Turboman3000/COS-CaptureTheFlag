@@ -13,7 +13,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Tag;
-import org.bukkit.entity.Interaction;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -72,7 +71,7 @@ public class PlayerPlaceBlockEvent implements Listener {
 
                         var loc = e.getBlock().getLocation();
 
-                        FlagInteractionEntity.getEntity(t.id(), loc);
+                        FlagInteractionEntity.getEntity(t.id(), loc.add(0.5d, 0, 0.5d));
 
                         teamSet++;
                         t.flagLocation(loc);
