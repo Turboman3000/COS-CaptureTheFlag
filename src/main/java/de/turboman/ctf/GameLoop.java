@@ -56,12 +56,14 @@ public class GameLoop implements Consumer<ScheduledTask> {
                 p.sendTitlePart(TitlePart.SUBTITLE, mm.deserialize("<gold>wins!"));
             }
 
-            for (var ent : Bukkit.getWorld("world").getEntities()) {
-                if (ent.getType() == EntityType.INTERACTION
-                        || ent.getType() == EntityType.ITEM_DISPLAY) {
-                    ent.remove();
+            Bukkit.getScheduler().runTask(plugin, () -> {
+                for (var ent : Bukkit.getWorld("world").getEntities()) {
+                    if (ent.getType() == EntityType.INTERACTION
+                            || ent.getType() == EntityType.ITEM_DISPLAY) {
+                        ent.remove();
+                    }
                 }
-            }
+            });
 
             for (var t : teamList.values()) {
                 t.flagLocation().getBlock().setType(Material.AIR);
