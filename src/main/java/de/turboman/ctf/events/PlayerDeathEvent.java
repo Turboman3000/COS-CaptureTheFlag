@@ -91,7 +91,8 @@ public class PlayerDeathEvent implements Listener {
 
                     var ppp = Bukkit.getPlayer(pp);
 
-                    ppp.setGlowing(false);
+                    assert ppp != null;
+                    ppp.removePotionEffect(PotionEffectType.GLOWING);
                     ppp.removePotionEffect(PotionEffectType.REGENERATION);
                     ppp.removePotionEffect(PotionEffectType.RESISTANCE);
                     ppp.removePotionEffect(PotionEffectType.DARKNESS);
@@ -109,6 +110,7 @@ public class PlayerDeathEvent implements Listener {
 
         p.sendMessage(mm.deserialize(prefix + "<red><b>You're dead!<!b><green> Wait for a Teammate to revive you!"));
         p.setGlowing(true);
+        p.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, Integer.MAX_VALUE, 255, false, false));
         p.addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS, Integer.MAX_VALUE, 255, false, false));
         p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, Integer.MAX_VALUE, 255, false, false));
         p.addPotionEffect(new PotionEffect(PotionEffectType.RESISTANCE, Integer.MAX_VALUE, 255, false, false));
