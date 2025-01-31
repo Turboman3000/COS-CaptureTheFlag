@@ -365,13 +365,6 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
 
                 }
                 case "config" -> {
-                    try {
-                        Long.parseLong(args[2]);
-                    } catch (NumberFormatException e) {
-                        sender.sendMessage(mm.deserialize(prefix + "<dark_red>" + args[2].toUpperCase() + " <red>is not a number!"));
-                        return true;
-                    }
-
                     switch (args[1]) {
                         case "PREP_TIME" -> {
                             PREP_TIME = Long.parseLong(args[2]);
@@ -381,6 +374,9 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
                         }
                         case "SEARCH_TIME" -> {
                             SEARCH_TIME = Long.parseLong(args[2]);
+                        }
+                        case "SKIP_PREP" -> {
+                            SKIP_PREP = Boolean.parseBoolean(args[2]);
                         }
                     }
 
@@ -430,6 +426,7 @@ public class CTFCommand implements CommandExecutor, TabCompleter {
             output.add("PREP_TIME");
             output.add("FIGHT_TIME");
             output.add("SEARCH_TIME");
+            output.add("SKIP_PREP");
         } else if (args.length == 4 && args[0].equalsIgnoreCase("team") && args[1].equalsIgnoreCase("create")) {
             output.add("black");
             output.add("dark_blue");

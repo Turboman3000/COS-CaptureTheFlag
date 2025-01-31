@@ -32,6 +32,7 @@ public final class CaptureTheFlag extends JavaPlugin {
     public static long PREP_TIME = 60;
     public static long FIGHT_TIME = 60;
     public static long SEARCH_TIME = 5;
+    public static boolean SKIP_PREP = false;
 
     public static long TIMER_HOURS = 0;
     public static long TIMER_MINUTES = 0;

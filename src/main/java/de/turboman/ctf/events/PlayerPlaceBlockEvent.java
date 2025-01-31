@@ -106,7 +106,13 @@ public class PlayerPlaceBlockEvent implements Listener {
                         t.bossBar().color(BossBar.Color.YELLOW);
 
                         if (teamSet == CaptureTheFlag.teamList.size()) {
-                            CaptureTheFlag.GAME_STATE = GameState.PREP;
+
+                            if (CaptureTheFlag.SKIP_PREP) {
+                                CaptureTheFlag.GAME_STATE = GameState.FIGHT;
+                            } else {
+                                CaptureTheFlag.GAME_STATE = GameState.PREP;
+                            }
+
                             CaptureTheFlag.startTimer();
 
                             for (var player : Bukkit.getOnlinePlayers()) {
