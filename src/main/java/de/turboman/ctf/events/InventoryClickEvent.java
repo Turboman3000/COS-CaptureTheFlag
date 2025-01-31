@@ -17,6 +17,11 @@ public class InventoryClickEvent implements Listener {
             return;
         }
 
+        if (e.getClick() == ClickType.SWAP_OFFHAND) {
+            e.setCancelled(true);
+            return;
+        }
+
         if (e.getCurrentItem() != null) {
             if (Tag.BANNERS.isTagged(e.getCurrentItem().getType())) {
                 e.setCancelled(true);
