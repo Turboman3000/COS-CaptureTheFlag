@@ -18,6 +18,7 @@ public class CTFTeam {
     private Location flagLocation = null;
     private UUID flagStolenBy = null;
     private float score = 0;
+    private CaptureState state = CaptureState.NOT_CAPTURED;
 
     public CTFTeam(UUID id, String name, String color, ArrayList<UUID> players, Group voiceGroup, BossBar bossBar) {
         this.id = id;
@@ -82,5 +83,13 @@ public class CTFTeam {
 
     public void score(float score) {
         this.score = score;
+    }
+
+    public CaptureState state() {
+        return state;
+    }
+
+    public void state(CaptureState state) {
+        this.state = state;
     }
 }
