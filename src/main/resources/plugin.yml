@@ -4,7 +4,7 @@ main: de.turboman.ctf.CaptureTheFlag
 api-version: '1.21'
 prefix: CTF
 authors: [ Turboman3000 ]
-description: The CaptureTheFlag Plugin for the Streaming Event "Clash of Streamers"
+description: Capture the Flag!
 website: https://ctf.turboman.de
 depend: [ voicechat ]
 
