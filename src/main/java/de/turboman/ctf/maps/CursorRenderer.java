@@ -33,6 +33,14 @@ public class CursorRenderer extends MapRenderer {
                 }
 
                 break;
+            } else {
+                for (int x = 0; x <= 127; x++) {
+                    for (int y = 0; y <= 127; y++) {
+                        if (y >= 3 && y <= 124 && x >= 3 && x <= 124) continue;
+
+                        canvas.setPixelColor(x, y, new Color(0, 0, 0, 0));
+                    }
+                }
             }
         }
 
