@@ -95,6 +95,7 @@ public class PlayerDeathEvent implements Listener {
                     ppp.removePotionEffect(PotionEffectType.REGENERATION);
                     ppp.removePotionEffect(PotionEffectType.RESISTANCE);
                     ppp.removePotionEffect(PotionEffectType.DARKNESS);
+                    ppp.removePotionEffect(PotionEffectType.WEAKNESS);
 
                     ppp.teleport(t.flagLocation());
                     ppp.teleportAsync(t.flagLocation());
@@ -111,5 +112,6 @@ public class PlayerDeathEvent implements Listener {
         p.addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS, Integer.MAX_VALUE, 255, false, false));
         p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, Integer.MAX_VALUE, 255, false, false));
         p.addPotionEffect(new PotionEffect(PotionEffectType.RESISTANCE, Integer.MAX_VALUE, 255, false, false));
+        p.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, Integer.MAX_VALUE, 255, false, false));
     }
 }

@@ -44,6 +44,7 @@ public class PlayerSneakEvent implements Listener {
                     near.removePotionEffect(PotionEffectType.REGENERATION);
                     near.removePotionEffect(PotionEffectType.RESISTANCE);
                     near.removePotionEffect(PotionEffectType.DARKNESS);
+                    near.removePotionEffect(PotionEffectType.WEAKNESS);
                 }
             }
         }
