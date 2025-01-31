@@ -75,11 +75,14 @@ public class PlayerPlaceBlockEvent implements Listener {
                         if (t.leader() != p.getUniqueId()) continue;
 
                         if (e.getBlockPlaced().isLiquid()) {
+                            p.sendMessage(mm.deserialize(CaptureTheFlag.prefix + "<red>The flag can't be placed here!"));
                             e.setCancelled(true);
                             return;
                         }
 
-                        if (e.getBlockPlaced().getLocation().getBlockY() <= e.getBlock().getWorld().getSeaLevel()) {
+                        if (e.getBlockPlaced().getLocation().getBlockY() <= e.getBlock().getWorld().getSeaLevel() - 1) {
+                            p.sendMessage(mm.deserialize(CaptureTheFlag.prefix + "<red>The flag must be placed above <dark_red>" + (e.getBlock().getWorld().getSeaLevel() - 1)));
+
                             e.setCancelled(true);
                             return;
                         }
