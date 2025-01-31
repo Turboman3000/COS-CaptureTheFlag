@@ -1,5 +1,6 @@
 package de.turboman.ctf.events;
 
+import de.turboman.ctf.CaptureState;
 import de.turboman.ctf.CaptureTheFlag;
 import de.turboman.ctf.FlagInteractionEntity;
 import de.turboman.ctf.commands.CTFCommand;
@@ -7,7 +8,6 @@ import de.turboman.ctf.maps.MapCursorEntry;
 import de.turboman.ctf.maps.MapManager;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -43,6 +43,7 @@ public class PlayerDeathEvent implements Listener {
             for (var tt : CaptureTheFlag.teamList.values()) {
                 if (tt.flagStolenBy() != p.getUniqueId()) continue;
 
+                tt.state(CaptureState.WILD);
                 p.getLocation().getBlock().setType(CTFCommand.getFlagItem(tt).getType());
                 FlagInteractionEntity.spawnEntity(tt.id(), p.getLocation());
 

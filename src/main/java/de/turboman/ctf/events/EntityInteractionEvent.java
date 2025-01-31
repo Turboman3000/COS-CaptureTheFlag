@@ -1,5 +1,6 @@
 package de.turboman.ctf.events;
 
+import de.turboman.ctf.CaptureState;
 import de.turboman.ctf.CaptureTheFlag;
 import de.turboman.ctf.FlagInteractionEntity;
 import de.turboman.ctf.GameState;
@@ -65,10 +66,15 @@ public class EntityInteractionEvent implements Listener {
                     return;
                 }
 
-                if (team.flagLocation() != e.getRightClicked().getLocation()) {
+                if (team.state() == CaptureState.WILD) {
                     FlagInteractionEntity.spawnEntity(team.id(), team.flagLocation());
                     team.flagLocation().getBlock().setType(CTFCommand.getFlagItem(team).getType());
                     e.getRightClicked().getLocation().getBlock().setType(Material.AIR);
+                    e.getRightClicked().remove();
+
+                    team.state(CaptureState.NOT_CAPTURED);
+
+                    return;
                 }
 
                 e.getPlayer().sendMessage(mm.deserialize(CaptureTheFlag.prefix + "<red>You can't steal your own Team's flag"));
