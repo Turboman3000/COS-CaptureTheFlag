@@ -75,6 +75,10 @@ public class GameLoop implements Consumer<ScheduledTask> {
                 }
 
                 for (var t : teamList.values()) {
+                    scoreObjec.getScore("t0_" + t.id()).resetScore();
+                    scoreObjec.getScore("t1_" + t.id()).resetScore();
+                    scoreObjec.getScore("t2_" + t.id()).resetScore();
+
                     t.flagLocation().getBlock().setType(Material.AIR);
 
                     int index = -1;
