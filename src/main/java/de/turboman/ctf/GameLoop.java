@@ -47,6 +47,8 @@ public class GameLoop implements Consumer<ScheduledTask> {
                     p.hideBossBar(b);
                 }
 
+                voicechatAPI.getConnectionOf(p.getUniqueId()).setGroup(null);
+
                 p.sendMessage(mm.deserialize(prefix + "<gold><b>The Game is Over!"));
 
                 CTFTeam highestPoints = null;
