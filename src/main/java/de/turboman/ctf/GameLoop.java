@@ -63,29 +63,29 @@ public class GameLoop implements Consumer<ScheduledTask> {
                         ent.remove();
                     }
                 }
-            });
 
-            for (var t : teamList.values()) {
-                t.flagLocation().getBlock().setType(Material.AIR);
+                for (var t : teamList.values()) {
+                    t.flagLocation().getBlock().setType(Material.AIR);
 
-                int index = -1;
+                    int index = -1;
 
-                for (var x = -1; x <= 1; x++) {
-                    for (var z = -1; z <= 1; z++) {
-                        index++;
+                    for (var x = -1; x <= 1; x++) {
+                        for (var z = -1; z <= 1; z++) {
+                            index++;
 
-                        t.flagLocation().clone().add(x, -1, z).getBlock().setType(t.groundBlocks().get(index));
+                            t.flagLocation().clone().add(x, -1, z).getBlock().setType(t.groundBlocks().get(index));
+                        }
                     }
                 }
-            }
 
-            deadPlayers.clear();
+                deadPlayers.clear();
 
-            HashMap<UUID, CTFTeam> keys = (HashMap<UUID, CTFTeam>) teamList.clone();
+                HashMap<UUID, CTFTeam> keys = (HashMap<UUID, CTFTeam>) teamList.clone();
 
-            for (var key : keys.keySet()) {
-                teamList.remove(key);
-            }
+                for (var key : keys.keySet()) {
+                    teamList.remove(key);
+                }
+            });
 
             task.cancel();
 
