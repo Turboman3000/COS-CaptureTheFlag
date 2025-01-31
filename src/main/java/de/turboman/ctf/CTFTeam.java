@@ -3,6 +3,7 @@ package de.turboman.ctf;
 import de.maxhenkel.voicechat.api.Group;
 import net.kyori.adventure.bossbar.BossBar;
 import org.bukkit.Location;
+import org.bukkit.Material;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -14,6 +15,7 @@ public class CTFTeam {
     private final ArrayList<UUID> players;
     private final Group voiceGroup;
     private final BossBar bossBar;
+    private final ArrayList<Material> groundBlocks;
     private UUID leader = null;
     private Location flagLocation = null;
     private UUID flagStolenBy = null;
@@ -27,6 +29,8 @@ public class CTFTeam {
         this.players = players;
         this.voiceGroup = voiceGroup;
         this.bossBar = bossBar;
+
+        this.groundBlocks = new ArrayList<>();
     }
 
     public UUID id() {
@@ -91,5 +95,9 @@ public class CTFTeam {
 
     public void state(CaptureState state) {
         this.state = state;
+    }
+
+    public ArrayList<Material> groundBlocks() {
+        return groundBlocks;
     }
 }

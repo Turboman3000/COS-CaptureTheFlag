@@ -96,6 +96,7 @@ public class PlayerPlaceBlockEvent implements Listener {
 
                         for (var x = -1; x <= 1; x++) {
                             for (var z = -1; z <= 1; z++) {
+                                t.groundBlocks().add(loc.clone().add(x, -1, z).getBlock().getType());
                                 loc.clone().add(x, -1, z).getBlock().setType(Material.BEDROCK);
                             }
                         }

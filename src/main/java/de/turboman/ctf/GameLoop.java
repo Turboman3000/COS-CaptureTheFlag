@@ -66,9 +66,13 @@ public class GameLoop implements Consumer<ScheduledTask> {
             for (var t : teamList.values()) {
                 t.flagLocation().getBlock().setType(Material.AIR);
 
+                int index = -1;
+
                 for (var x = -1; x <= 1; x++) {
                     for (var z = -1; z <= 1; z++) {
-                        t.flagLocation().clone().add(x, -1, z).getBlock().setType(Material.BEDROCK);
+                        index++;
+
+                        t.flagLocation().clone().add(x, -1, z).getBlock().setType(t.groundBlocks().get(index));
                     }
                 }
             }
