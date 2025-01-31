@@ -100,7 +100,7 @@ public class PlayerDeathEvent implements Listener {
                     ppp.teleport(t.flagLocation());
                     ppp.teleportAsync(t.flagLocation());
 
-                    p.sendMessage(mm.deserialize(prefix + "<red>Your entire Team is dead, you're getting Respawned at the Team's flag"));
+                    ppp.sendMessage(mm.deserialize(prefix + "<red>Your entire Team is dead, you're getting Respawned at the Team's flag"));
                 }
             }
 
