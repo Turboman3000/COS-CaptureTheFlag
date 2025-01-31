@@ -35,6 +35,7 @@ public class GameLoop implements Consumer<ScheduledTask> {
                 && GAME_STATE == GameState.FIGHT) {
             for (var p : Bukkit.getOnlinePlayers()) {
                 p.sendMessage(mm.deserialize(prefix + "<green>Game ends in <gold>" + TIMER_SECONDS + "<green> seconds!"));
+                p.playSound(Sound.sound(Key.key("minecraft:entity.experience_orb.pickup"), Sound.Source.MASTER, 1, 0));
             }
         }
 
@@ -49,6 +50,7 @@ public class GameLoop implements Consumer<ScheduledTask> {
 
                 voicechatAPI.getConnectionOf(p.getUniqueId()).setGroup(null);
 
+                p.playSound(Sound.sound(Key.key("minecraft:entity.wither.death"), Sound.Source.MASTER, 0.85f, 1));
                 p.sendMessage(mm.deserialize(prefix + "<gold><b>The Game is Over!"));
 
                 CTFTeam highestPoints = null;
