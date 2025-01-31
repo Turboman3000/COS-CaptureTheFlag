@@ -30,6 +30,16 @@ public class GameLoop implements Consumer<ScheduledTask> {
     public void accept(ScheduledTask task) {
         if (TIMER_HOURS == 0
                 && TIMER_MINUTES == 0
+                && TIMER_SECONDS <= 5
+                && TIMER_SECONDS != 0
+                && GAME_STATE == GameState.FIGHT) {
+            for (var p : Bukkit.getOnlinePlayers()) {
+                p.sendMessage(mm.deserialize(prefix + "<green>Game ends in <gold>" + TIMER_SECONDS + "<green> seconds!"));
+            }
+        }
+
+        if (TIMER_HOURS == 0
+                && TIMER_MINUTES == 0
                 && TIMER_SECONDS == 0
                 && GAME_STATE == GameState.FIGHT) {
             for (var p : Bukkit.getOnlinePlayers()) {
