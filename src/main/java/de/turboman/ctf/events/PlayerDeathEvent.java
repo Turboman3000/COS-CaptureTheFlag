@@ -45,7 +45,7 @@ public class PlayerDeathEvent implements Listener {
 
                 tt.state(CaptureState.WILD);
                 p.getLocation().getBlock().setType(CTFCommand.getFlagItem(tt).getType());
-                FlagInteractionEntity.spawnEntity(tt.id(), p.getLocation());
+                FlagInteractionEntity.spawnEntity(tt.id(), p.getLocation().getBlock().getLocation());
 
                 tt.flagStolenBy(null);
 
