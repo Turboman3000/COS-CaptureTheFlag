@@ -10,11 +10,15 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.title.Title;
 import net.kyori.adventure.title.TitlePart;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.entity.EntityType;
 import org.bukkit.map.MapCursor;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
+import java.util.HashMap;
+import java.util.UUID;
 import java.util.function.Consumer;
 
 import static de.turboman.ctf.CaptureTheFlag.*;
@@ -24,6 +28,64 @@ public class GameLoop implements Consumer<ScheduledTask> {
 
     @Override
     public void accept(ScheduledTask task) {
+        if (TIMER_HOURS == 0
+                && TIMER_MINUTES == 0
+                && TIMER_SECONDS == 0
+                && GAME_STATE == GameState.FIGHT) {
+            for (var p : Bukkit.getOnlinePlayers()) {
+                for (var b : p.activeBossBars()) {
+                    p.hideBossBar(b);
+                }
+
+                p.sendMessage(mm.deserialize(prefix + "<gold><b>The Game is Over!"));
+
+                CTFTeam highestPoints = null;
+
+                for (var t : teamList.values()) {
+                    if (highestPoints == null || highestPoints.score() < t.score()) {
+                        highestPoints = t;
+                    }
+
+                    p.sendMessage(mm.deserialize(prefix + "<green>Team <" + t.color() + ">" + t.name() + "<green> has <gold>" + ((int) t.score()) + "<green> points!"));
+                }
+
+                assert highestPoints != null;
+
+                p.sendTitlePart(TitlePart.TIMES, Title.Times.times(Duration.ZERO, Duration.ofMillis(5000), Duration.ofMillis(3000)));
+                p.sendTitlePart(TitlePart.TITLE, mm.deserialize("<" + highestPoints.color() + ">" + highestPoints.name()));
+                p.sendTitlePart(TitlePart.SUBTITLE, mm.deserialize("<gold>wins!"));
+            }
+
+            for (var ent : Bukkit.getWorld("world").getEntities()) {
+                if (ent.getType() == EntityType.INTERACTION
+                        || ent.getType() == EntityType.ITEM_DISPLAY) {
+                    ent.remove();
+                }
+            }
+
+            for (var t : teamList.values()) {
+                t.flagLocation().getBlock().setType(Material.AIR);
+
+                for (var x = -1; x <= 1; x++) {
+                    for (var z = -1; z <= 1; z++) {
+                        t.flagLocation().clone().add(x, -1, z).getBlock().setType(Material.BEDROCK);
+                    }
+                }
+            }
+
+            deadPlayers.clear();
+
+            HashMap<UUID, CTFTeam> keys = (HashMap<UUID, CTFTeam>) teamList.clone();
+
+            for (var key : keys.keySet()) {
+                teamList.remove(key);
+            }
+
+            task.cancel();
+
+            return;
+        }
+
         if (TIMER_SECONDS <= 5
                 && TIMER_SECONDS != 0
                 && TIMER_HOURS == 0
