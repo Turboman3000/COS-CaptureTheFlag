@@ -33,6 +33,11 @@ public class EntityInteractionEvent implements Listener {
             return;
         }
 
+        if (CaptureTheFlag.deadPlayers.contains(e.getPlayer().getUniqueId())) {
+            e.setCancelled(true);
+            return;
+        }
+
         for (var tag : e.getRightClicked().getScoreboardTags()) {
             if (!tag.startsWith("teamFlag_")) continue;
 

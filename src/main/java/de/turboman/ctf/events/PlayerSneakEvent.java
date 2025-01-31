@@ -20,7 +20,10 @@ public class PlayerSneakEvent implements Listener {
 
         Player p = e.getPlayer();
 
-        if (CaptureTheFlag.deadPlayers.contains(p.getUniqueId())) return;
+        if (CaptureTheFlag.deadPlayers.contains(e.getPlayer().getUniqueId())) {
+            e.setCancelled(true);
+            return;
+        }
 
         var nearby = (ArrayList<Player>) p.getWorld().getNearbyEntitiesByType(Player.class, p.getLocation(), 2);
 

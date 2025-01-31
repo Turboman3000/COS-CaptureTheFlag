@@ -29,6 +29,11 @@ public class PlayerPlaceBlockEvent implements Listener {
 
         if (p.getGameMode() == GameMode.CREATIVE) return;
 
+        if (CaptureTheFlag.deadPlayers.contains(e.getPlayer().getUniqueId())) {
+            e.setCancelled(true);
+            return;
+        }
+
         switch (e.getBlockPlaced().getType()) {
             case Material.BLACK_WALL_BANNER, Material.BLUE_WALL_BANNER, Material.GREEN_WALL_BANNER,
                  Material.CYAN_WALL_BANNER, Material.PURPLE_WALL_BANNER, Material.LIGHT_GRAY_WALL_BANNER,
