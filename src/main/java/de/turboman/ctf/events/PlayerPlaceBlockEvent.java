@@ -72,7 +72,7 @@ public class PlayerPlaceBlockEvent implements Listener {
                     }
 
                     for (var t : CaptureTheFlag.teamList.values()) {
-                        if (t.leader() != p.getUniqueId()) continue;
+                        if (t.leader().compareTo(p.getUniqueId()) != 0) continue;
 
                         if (e.getBlockPlaced().isLiquid()) {
                             p.sendMessage(mm.deserialize(CaptureTheFlag.prefix + "<red>The flag can't be placed here!"));

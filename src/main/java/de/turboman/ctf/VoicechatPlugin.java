@@ -1,10 +1,7 @@
 package de.turboman.ctf;
 
 import de.maxhenkel.voicechat.api.VoicechatApi;
-import de.maxhenkel.voicechat.api.events.CreateGroupEvent;
-import de.maxhenkel.voicechat.api.events.EventRegistration;
-import de.maxhenkel.voicechat.api.events.LeaveGroupEvent;
-import de.maxhenkel.voicechat.api.events.VoicechatServerStartedEvent;
+import de.maxhenkel.voicechat.api.events.*;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.entity.Player;
 
@@ -23,6 +20,7 @@ public class VoicechatPlugin implements de.maxhenkel.voicechat.api.VoicechatPlug
         registration.registerEvent(VoicechatServerStartedEvent.class, this::onServerStarted);
         registration.registerEvent(CreateGroupEvent.class, this::onGroupCreate);
         registration.registerEvent(LeaveGroupEvent.class, this::onGroupLeave);
+        registration.registerEvent(PlayerConnectedEvent.class, this::onClientConnected);
     }
 
     private void onGroupCreate(CreateGroupEvent event) {
@@ -47,6 +45,17 @@ public class VoicechatPlugin implements de.maxhenkel.voicechat.api.VoicechatPlug
 
     private void onServerStarted(VoicechatServerStartedEvent event) {
         CaptureTheFlag.voicechatAPI = event.getVoicechat();
+    }
+
+    private void onClientConnected(PlayerConnectedEvent event) {
+        Player p = (Player) event.getConnection().getPlayer().getPlayer();
+
+        for (var t : CaptureTheFlag.teamList.values()) {
+            if (!t.players().contains(p.getUniqueId())) continue;
+
+            event.getConnection().setGroup(t.voiceGroup());
+            break;
+        }
     }
 
     @Override

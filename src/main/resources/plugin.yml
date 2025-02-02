@@ -1,5 +1,5 @@
 name: CaptureTheFlag
-version: '1.0.0'
+version: '1.0.1'
 main: de.turboman.ctf.CaptureTheFlag
 api-version: '1.21'
 prefix: CTF
